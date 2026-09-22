@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Candlelight/Candlelight.vcxproj" Id="a5c19c4e-5250-45c0-bed8-1e2ab9388616" />
+</Solution>
