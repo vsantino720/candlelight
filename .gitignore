@@ -44,6 +44,7 @@ build/
 Build/
 build-*/
 Debug/
+Release/
 
 # CMake generated files
 CMakeFiles/
@@ -64,6 +65,8 @@ vcpkg_installed/
 
 # vs
 .vs/
+*.suo
+*.user
 
 # debug information files
 *.dwo
@@ -71,3 +74,4 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
