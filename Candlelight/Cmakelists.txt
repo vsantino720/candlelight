@@ -1,0 +1,25 @@
+cmake_minimum_required(VERSION 3.21)
+project(Candlelight CXX)
+ 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+find_package(SDL3 CONFIG REQUIRED)
+find_package(SDL3_image CONFIG REQUIRED)
+ 
+add_executable(Candlelight main.cpp)
+ 
+# SDL3::SDL3_main is optional (mainly matters for Windows GUI apps) and
+# isn't guaranteed to exist on every platform/config, so guard the link.
+if(TARGET SDL3::SDL3_main)
+    target_link_libraries(TileRPGEngine PRIVATE SDL3::SDL3_main)
+endif()
+ 
+target_link_libraries(Candlelight
+    PRIVATE
+        SDL3::SDL3
+        $<IF:$<TARGET_EXISTS:SDL3_image::SDL3_image>,SDL3_image::SDL3_image,SDL3_image::SDL3_image-static>
+)
+ 
+# Console subsystem is kept for now so std::cerr/debug output is visible.
+# Switch add_executable to WIN32 mode once you have real logging in place.

@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "dependencies": [
     "sdl3",
-    "sdl3-image",
-    "sdl3-ttf"
+    "sdl3-image"
   ],
   "builtin-baseline": "6e856794aebd1ee877acb74c9264d9552903c6fe"
 }
