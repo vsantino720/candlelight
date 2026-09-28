@@ -2,6 +2,7 @@
 
 #include <string>
 #include "clobject.h"
+#include "game_context.h"
 
 /// Base candlelight attribute class. All attributes should inherit from this class.
 /// Attributes provide modular behaviors to objects in the Candlelight engine. 
@@ -17,9 +18,10 @@ public:
 	c_clattribute(c_clobject& owning_object) : m_owner(owning_object) {}
 
 	// Called every frame to update the attribute
-	virtual void update(float deltaTime) = 0;
+	virtual void update(float deltaTime, const c_game_context& game_context) = 0;
 protected:
 	// If true, only one instance of this attribute can be added to an object
 	bool m_is_singleton = false;
+
 	c_clobject& m_owner; // The object that owns this attribute
 };

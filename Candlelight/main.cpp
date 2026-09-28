@@ -9,9 +9,6 @@
 
 constexpr int WINDOW_WIDTH= 960;
 constexpr int WINDOW_HEIGHT= 640;
-constexpr int MAX_TILES_X = WINDOW_WIDTH / TILE_SIZE;
-constexpr int MAX_TILES_Y = WINDOW_HEIGHT / TILE_SIZE;
-constexpr int TILE_SIZE= 32; // pixels
 constexpr int PLAYER_SPEED= 64; // pixels per sec
 
 int main(int argc, char* argv[]) {
@@ -106,25 +103,7 @@ int main(int argc, char* argv[]) {
 
         // --- Render ---
         SDL_SetRenderDrawColor(renderer, 24, 24, 32, 255);
-        SDL_RenderClear(renderer);
-
-        // A filled rectangle, roughly centered - stand-in for a tile/sprite
-        // until texture loading is wired up in Phase 2.
-        SDL_FRect filledRect
-        {
-            playerPosition.x - (TILE_SIZE / 2.0f),
-            playerPosition.y - (TILE_SIZE / 2.0f),
-            (float)TILE_SIZE,
-            (float)TILE_SIZE
-        };
-
-        SDL_SetRenderDrawColor(renderer, 220, 60, 60, 255);
-        SDL_RenderFillRect(renderer, &filledRect);
-
-        // An outlined rectangle, drawn only to contrast with the filled one.
-        SDL_FRect outlineRect{ 40.0f, 40.0f, 96.0f, 64.0f };
-        SDL_SetRenderDrawColor(renderer, 90, 200, 120, 255);
-        SDL_RenderRect(renderer, &outlineRect);
+        SDL_RenderClear(renderer);;
 
         // TODO: draw tilemap, entities, UI here.
 

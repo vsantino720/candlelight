@@ -13,13 +13,57 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Attributes">
+      <UniqueIdentifier>{d0eed947-d475-4818-a214-6b638a702dfd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="tilemap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="player_controller_attr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="input_context.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game_context.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="clobject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="clobject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="clattribute.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tilemap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="player_controller_attr.h">
+      <Filter>Header Files\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="input_context.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_context.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,24 +3,34 @@
 #include <vector>
 #include "clobject.h"
 
-// Position in tiles-space, not screen-space (pixels)
-struct TilePosition
+// Struct representing a position within a tile, in tile units
+// We use floats here to allow for smooth movement between tiles, rather than snapping to tile positions.
+struct s_tile_position
+{
+	float x;
+	float y;
+
+	inline bool is_clear() const { return x == 0.0f && y == 0.0f; }
+	void clear();
+};
+
+// Struct representing a position on the tilemap
+struct s_tilemap_position
 {
 	int x;
 	int y;
 };
 
-// Class representing a tilemap in the Candlelight engine.
-class c_tilemap
+// Struct representing a tilemap in the Candlelight engine.
+struct s_tilemap
 {
-public:
-	c_tilemap(int x, int y) : m_max_tiles_x(x), m_max_tiles_y(y) {}
-private:
+	s_tilemap(int x, int y) : m_max_tiles_x(x), m_max_tiles_y(y) {}
+	
 	// Dimensions of the tilemap in tiles. This is not the same as the
 	// screen dimensions, which are in pixels.
 	int m_max_tiles_x;
 	int m_max_tiles_y;
 
-	// 2D vector of clobjects representing the clobjects in the tilemap
-	std::vector<std::vector<c_clobject>> m_clobjects;
+	// 2D vector of tiles representing the tilemap
+	std::vector<std::vector<c_clobject*>> m_tiles;
 };

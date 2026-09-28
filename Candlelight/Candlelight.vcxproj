@@ -142,10 +142,25 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="clobject.cpp" />
+    <ClCompile Include="game_context.cpp" />
+    <ClCompile Include="game_manager.cpp" />
+    <ClCompile Include="input_context.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="player_controller_attr.cpp" />
+    <ClCompile Include="tilemap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="clattribute.h" />
+    <ClInclude Include="game_context.h" />
+    <ClInclude Include="game_manager.h" />
+    <ClInclude Include="input_context.h" />
+    <ClInclude Include="clobject.h" />
+    <ClInclude Include="player_controller_attr.h" />
+    <ClInclude Include="tilemap.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
