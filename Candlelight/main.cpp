@@ -7,10 +7,6 @@
 #include <SDL3/SDL_main.h>
 #include <iostream>
 
-constexpr int WINDOW_WIDTH= 960;
-constexpr int WINDOW_HEIGHT= 640;
-constexpr int PLAYER_SPEED= 64; // pixels per sec
-
 int main(int argc, char* argv[]) {
     // SDL3 functions return bool now (true = success) instead of SDL2's
     // "0 or positive = success" convention.
@@ -74,27 +70,6 @@ int main(int argc, char* argv[]) {
             if (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_ESCAPE) {
                 running = false;
             }
-
-			if (event.type == SDL_EVENT_KEY_DOWN) {
-				switch (event.key.key) {
-				case SDLK_W:
-					if (targetPlayerPosition != currentPlayerPosition)
-                    {
-                        ;
-					break;
-				case SDLK_S:
-					playerPosition.y += (PIXELS_PER_SECOND * deltaTime);
-					break;
-				case SDLK_A:
-					playerPosition.x -= (PIXELS_PER_SECOND * deltaTime);
-					break;
-				case SDLK_D:
-					playerPosition.x += (PIXELS_PER_SECOND * deltaTime);
-					break;
-				default:
-					break;
-				}
-			}
         }
 
         // --- Update ---
@@ -103,7 +78,20 @@ int main(int argc, char* argv[]) {
 
         // --- Render ---
         SDL_SetRenderDrawColor(renderer, 24, 24, 32, 255);
-        SDL_RenderClear(renderer);;
+        SDL_RenderClear(renderer);
+
+        // A filled rectangle, roughly centered - stand-in for a tile/sprite
+        // until texture loading is wired up in Phase 2.
+        SDL_FRect filledRect
+        {
+            playerPosition.x - (TILE_SIZE / 2.0f),
+            playerPosition.y - (TILE_SIZE / 2.0f),
+            (float)TILE_SIZE,
+            (float)TILE_SIZE
+        };
+
+        SDL_SetRenderDrawColor(renderer, 220, 60, 60, 255);
+        SDL_RenderFillRect(renderer, &filledRect);
 
         // TODO: draw tilemap, entities, UI here.
 

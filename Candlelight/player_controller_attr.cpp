@@ -4,7 +4,7 @@
 void c_player_controller_attr::update(float deltaTime, const c_game_context& game_context)
 {
 	// Update the player's target position based on input
-	const c_input_context& input_context = game_context.get_readonly_input_context();
+	const c_input_manager& input_context = game_context.get_readonly_input_context();
 
 	s_tile_position current_position = m_owner.get_relative_tile_offset();
 
@@ -13,19 +13,19 @@ void c_player_controller_attr::update(float deltaTime, const c_game_context& gam
 	// move when they are not already moving. This prevents 
 	// the player from changing direction mid-move.
 		
-	if (current_position.y < 0.0f || input_context.is_input_pressed("move_up"))
+	if (current_position.y < 0.0f || input_context.input_is_pressed("move_up"))
 	{
 		current_position.y -= m_move_speed * deltaTime;
 	}
-	else if (current_position.y > 0.0f || input_context.is_input_pressed("move_down"))
+	else if (current_position.y > 0.0f || input_context.input_is_pressed("move_down"))
 	{
 		current_position.y += m_move_speed * deltaTime;
 	}
-	else if (current_position.x < 0.0f || input_context.is_input_pressed("move_left"))
+	else if (current_position.x < 0.0f || input_context.input_is_pressed("move_left"))
 	{
 		current_position.x -= m_move_speed * deltaTime;
 	}
-	else if (current_position.x > 0.0f || input_context.is_input_pressed("move_right"))
+	else if (current_position.x > 0.0f || input_context.input_is_pressed("move_right"))
 	{
 		current_position.x += m_move_speed * deltaTime;
 	}

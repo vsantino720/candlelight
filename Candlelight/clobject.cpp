@@ -22,9 +22,3 @@ void c_clobject::clear_relative_tile_offset()
 {
 	m_relative_tile_offset = { 0, 0 };
 }
-
-void c_clobject::reverse_relative_tile_offset()
-{
-	m_relative_tile_offset.x = -m_relative_tile_offset.x;
-	m_relative_tile_offset.y = -m_relative_tile_offset.y;
-}

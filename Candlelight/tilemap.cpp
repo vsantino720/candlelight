@@ -10,13 +10,13 @@ void s_tile_position::clear()
 }
 
 // s_tilemap
-s_tilemap::s_tilemap(int x, int y) : m_max_tiles_x(x), m_max_tiles_y(y)
+s_tilemap::s_tilemap(int x, int y) : max_tiles_x(x), max_tiles_y(y)
 {
 	// Initialize the 2D vector of tiles to the size of the tilemap
-	m_tiles.resize(m_max_tiles_x);
-	for (int i = 0; i < m_max_tiles_x; i++)
+	m_tiles.resize(max_tiles_x);
+	for (int i = 0; i < max_tiles_x; i++)
 	{
-		m_tiles[i].resize(m_max_tiles_y);
+		m_tiles[i].resize(max_tiles_y);
 	}
 }
 

@@ -24,12 +24,12 @@ struct s_tilemap_position
 // Struct representing a tilemap in the Candlelight engine.
 struct s_tilemap
 {
-	s_tilemap(int x, int y) : m_max_tiles_x(x), m_max_tiles_y(y) {}
+	s_tilemap(int x, int y) : max_tiles_x(x), max_tiles_y(y) {}
 	
 	// Dimensions of the tilemap in tiles. This is not the same as the
 	// screen dimensions, which are in pixels.
-	int m_max_tiles_x;
-	int m_max_tiles_y;
+	int max_tiles_x;
+	int max_tiles_y;
 
 	// 2D vector of tiles representing the tilemap
 	std::vector<std::vector<c_clobject*>> m_tiles;

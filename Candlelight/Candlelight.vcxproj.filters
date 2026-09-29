@@ -16,6 +16,9 @@
     <Filter Include="Header Files\Attributes">
       <UniqueIdentifier>{d0eed947-d475-4818-a214-6b638a702dfd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Attributes">
+      <UniqueIdentifier>{7c420808-5cae-4c37-ac57-12e48dbf93ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -24,10 +27,7 @@
     <ClCompile Include="tilemap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="player_controller_attr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="input_context.cpp">
+    <ClCompile Include="input_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="game_context.cpp">
@@ -38,6 +38,12 @@
     </ClCompile>
     <ClCompile Include="game_manager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game_renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="player_controller_attr.cpp">
+      <Filter>Source Files\Attributes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -56,13 +62,16 @@
     <ClInclude Include="player_controller_attr.h">
       <Filter>Header Files\Attributes</Filter>
     </ClInclude>
-    <ClInclude Include="input_context.h">
+    <ClInclude Include="input_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game_context.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
