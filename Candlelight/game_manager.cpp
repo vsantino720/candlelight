@@ -46,7 +46,7 @@ void c_game_manager::sanitize_tile_offset(s_tile_position* offset)
 	offset->x = (offset->x < -TILE_MOVE_THRESHOLD) ? -TILE_MOVE_THRESHOLD : offset->x;
 	offset->x = (offset->x > TILE_MOVE_THRESHOLD) ? TILE_MOVE_THRESHOLD : offset->x;
 	offset->y = (offset->y < -TILE_MOVE_THRESHOLD) ? -TILE_MOVE_THRESHOLD : offset->y;
-	offset->x = (offset->y > TILE_MOVE_THRESHOLD) ? TILE_MOVE_THRESHOLD : offset->y;
+	offset->y = (offset->y > TILE_MOVE_THRESHOLD) ? TILE_MOVE_THRESHOLD : offset->y;
 }
 
 // Migrates the tile offset across tile boundary lines
@@ -69,7 +69,7 @@ void c_game_manager::migrate_tile_offset(
 	offset->x = (offset->x < -TILE_MOVE_THRESHOLD) ? (offset->x + x_diff) : offset->x;
 	offset->x = (offset->x > TILE_MOVE_THRESHOLD) ? (x_diff - offset->x) : offset->x;
 	offset->y = (offset->y < -TILE_MOVE_THRESHOLD) ? (offset->y + y_diff) : offset->y;
-	offset->x = (offset->y > TILE_MOVE_THRESHOLD) ? (y_diff - offset->y) : offset->y;
+	offset->y = (offset->y > TILE_MOVE_THRESHOLD) ? (y_diff - offset->y) : offset->y;
 }
 
 void c_game_manager::sanitize_object_position(c_clobject* obj, const s_tilemap_position& pos)
