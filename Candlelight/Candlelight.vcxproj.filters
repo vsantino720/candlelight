@@ -30,9 +30,6 @@
     <ClCompile Include="input_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="game_context.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="clobject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -63,9 +60,6 @@
       <Filter>Header Files\Attributes</Filter>
     </ClInclude>
     <ClInclude Include="input_manager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="game_context.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game_manager.h">

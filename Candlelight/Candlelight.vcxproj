@@ -143,7 +143,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="clobject.cpp" />
-    <ClCompile Include="game_context.cpp" />
     <ClCompile Include="game_manager.cpp" />
     <ClCompile Include="game_renderer.cpp" />
     <ClCompile Include="input_manager.cpp" />
@@ -157,7 +156,6 @@
   <ItemGroup>
     <ClInclude Include="clattribute.h" />
     <ClInclude Include="game_renderer.h" />
-    <ClInclude Include="game_context.h" />
     <ClInclude Include="game_manager.h" />
     <ClInclude Include="input_manager.h" />
     <ClInclude Include="clobject.h" />

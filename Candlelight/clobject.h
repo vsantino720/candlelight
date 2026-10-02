@@ -3,7 +3,7 @@
 #include <vector>
 #include "clattribute.h"
 #include "tilemap.h"
-#include "game_context.h"
+#include "game_manager.h"
 
 // This is a class that represents a generic object in the Candlelight engine.
 // Every object can have multiple attributes attached to it, which define its behavior and properties.
@@ -11,7 +11,7 @@
 class c_clobject
 {
 public:
-	void update(float deltaTime, const c_game_context& game_context);
+	void update(float deltaTime);
 	void set_relative_tile_offset(const s_tile_position& pos);
 	const s_tile_position& get_relative_tile_offset() const;
 	void clear_relative_tile_offset();

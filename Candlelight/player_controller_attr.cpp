@@ -1,10 +1,11 @@
 #include "player_controller_attr.h"
 #include <SDL3/SDL.h>
 
-void c_player_controller_attr::update(float deltaTime, const c_game_context& game_context)
+void c_player_controller_attr::update(float deltaTime)
 {
 	// Update the player's target position based on input
-	const c_input_manager& input_context = game_context.get_readonly_input_context();
+	const c_input_manager& input_context = 
+		c_game_manager::get_instance().get_readonly_input_context();
 
 	s_tile_position current_position = m_owner.get_relative_tile_offset();
 

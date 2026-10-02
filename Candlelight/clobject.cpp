@@ -1,10 +1,10 @@
 #include "clobject.h"
 
-void c_clobject::update(float deltaTime, const c_game_context& game_context)
+void c_clobject::update(float deltaTime)
 {
 	for (c_clattribute& attribute : m_attributes)
 	{
-		attribute.update(deltaTime, game_context);
+		attribute.update(deltaTime);
 	}
 }
 

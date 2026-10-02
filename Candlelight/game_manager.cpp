@@ -3,6 +3,23 @@
 
 // public methods
 
+// Static singletone instantiation methods
+c_game_manager* c_game_manager::try_to_create_instance()
+{
+	if (instance == nullptr)
+	{
+		instance = new c_game_manager();
+	}
+	return instance;
+}
+
+const c_game_manager& c_game_manager::get_instance()
+{
+	assert(instance != nullptr);
+	return *instance;
+}
+
+
 void c_game_manager::update(float deltaTime)
 {
 	// Update the current tilemap and object positions
@@ -26,7 +43,7 @@ void c_game_manager::update(float deltaTime)
 					}
 
 					// Run the update function for the object, which will in turn update its attributes
-					obj->update(deltaTime, m_game_context);
+					obj->update(deltaTime);
 
 					// Check if the object has moved to a new tile, and enforce collision and tilebounds
 					sanitize_object_position(obj, { x, y });
@@ -34,6 +51,22 @@ void c_game_manager::update(float deltaTime)
 			}
 		}
 	}
+}
+
+const c_input_manager& c_game_manager::get_readonly_input_context() const
+{
+	return const_cast<const c_input_manager&>(get_input_context());
+}
+
+c_input_manager& c_game_manager::get_input_context() const
+{
+	assert(m_input_context != nullptr);
+	return *m_input_context;
+}
+
+void c_game_manager::set_current_tilemap(s_tilemap* tilemap)
+{
+	m_current_tilemap = tilemap;
 }
 
 // private methods
