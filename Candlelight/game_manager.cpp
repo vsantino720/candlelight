@@ -72,6 +72,7 @@ bool c_game_manager::run_game()
 			// --- Render ---
 			{
 				m_game_renderer->draw_background();
+				draw_tiles();
 				draw_objects();
 				m_game_renderer->render();
 			}
@@ -250,15 +251,29 @@ void c_game_manager::draw_objects()
 	{
 		for (int y = 0; y < max_tiles_y; ++y)
 		{
-			// Draw empty tile (background) if needed
-			assert(m_game_renderer != nullptr);
-			m_game_renderer->draw_tile({ x, y });
-
 			c_clobject* obj = m_current_tilemap->m_tiles[x][y];
 			if (obj != nullptr)
 			{
 				draw_object(*obj, { x, y });
 			}
+		}
+	}
+}
+
+// Used for debugging purposes to visualize tile boundaries
+void c_game_manager::draw_tiles()
+{
+	assert(m_current_tilemap != nullptr);
+	int max_tiles_x = m_current_tilemap->max_tiles_x;
+	int max_tiles_y = m_current_tilemap->max_tiles_y;
+
+	for (int x = 0; x < max_tiles_x; ++x)
+	{
+		for (int y = 0; y < max_tiles_y; ++y)
+		{
+			// Draw empty tile for debugging purposes
+			assert(m_game_renderer != nullptr);
+			m_game_renderer->draw_tile({ x, y });
 		}
 	}
 }

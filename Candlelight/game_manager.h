@@ -65,6 +65,7 @@ private:
 	// Drawing
 	void draw_object(const c_clobject& obj, const s_tilemap_position& pos);
 	void draw_objects();
+	void draw_tiles();
 
 	// member variables
 	// Current tilemap to render and update.

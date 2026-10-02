@@ -27,7 +27,7 @@ public:
 	}
 
 private:
-	// List of candlelight attributes attached to this clobject. Stored inline in the vector.
+	// List of candlelight attributes attached to this clobject.
 	std::vector<std::unique_ptr<c_clattribute>> m_attributes;
 
 	// Distance from the current tile-center, in tile units.
