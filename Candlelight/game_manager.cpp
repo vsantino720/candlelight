@@ -1,5 +1,7 @@
 // includes
+#include <algorithm>
 #include <assert.h>
+#include <cmath>
 #include <SDL3/SDL.h>
 #include "clobject.h"
 #include "game_manager.h"
@@ -191,18 +193,15 @@ void c_game_manager::sanitize_object_position(c_clobject* obj, const s_tilemap_p
 		int new_x = round_to_nearest_tile(pos.x + offset.x);
 		int new_y = round_to_nearest_tile(pos.y + offset.y);
 
-		const bool within_tilemap_bounds =
-			(new_x >= 0)
-			&& new_x < max_tiles_x
-			&& new_y >= 0
-			&& new_y < max_tiles_y;
+		// If either exceeds the maximum tilemap bounds, we will clamp 
+		// the position to the maximum tilemap bounds.
+		new_x = std::clamp(new_x, 0, max_tiles_x - 1);
+		new_y = std::clamp(new_y, 0, max_tiles_y - 1);
 
-		const bool new_position_empty =
-			within_tilemap_bounds 
-			&& m_current_tilemap->m_tiles[new_x][new_y] == nullptr;
+		const bool new_position_empty = m_current_tilemap->m_tiles[new_x][new_y] == nullptr;
 
 		// Check if the new position is within bounds
-		if (within_tilemap_bounds && new_position_empty)
+		if (new_position_empty)
 		{
 			// Move the object to the new tile
 			m_current_tilemap->m_tiles[new_x][new_y] = obj;

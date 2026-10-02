@@ -8,6 +8,7 @@ class c_clobject;
 struct s_tilemap_position;
 
 constexpr int TILE_SIZE = 128; // pixels
+constexpr int OBJECT_SIZE = 128; // pixels
 
 // Renders game objects
 class c_game_renderer

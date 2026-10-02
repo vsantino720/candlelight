@@ -21,7 +21,7 @@ bool c_game_renderer::initilize_window()
     m_window = SDL_CreateWindow(
         m_window_name.c_str(),
         m_window_width, m_window_height,
-        0);
+        SDL_WINDOW_RESIZABLE);
 
     if (!m_window) {
         std::cerr << "SDL_CreateWindow failed: " << SDL_GetError() << std::endl;
@@ -52,14 +52,14 @@ void c_game_renderer::draw_object(const c_clobject& obj, const s_tilemap_positio
 
     const s_tile_position offset = obj.get_relative_tile_offset();
 
-    // A filled rectangle, roughly centered - stand-in for a tile/sprite
+    // A filled rectangle - stand-in for a tile/sprite
     // until texture loading is wired up in Phase 2.
     SDL_FRect filledRect
     {
-        ((pos.x + offset.x) * TILE_SIZE),
-        ((pos.y + offset.y) * TILE_SIZE),
-        (float)TILE_SIZE,
-        (float)TILE_SIZE
+        ((pos.x + offset.x) * OBJECT_SIZE),
+        ((pos.y + offset.y) * OBJECT_SIZE),
+        (float)OBJECT_SIZE,
+        (float)OBJECT_SIZE
     };
 
     SDL_SetRenderDrawColor(m_renderer, 220, 60, 60, 255);

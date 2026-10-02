@@ -27,15 +27,18 @@ void c_player_controller_attr::update()
 	{
 		current_position.y -= pos_diff;
 	}
-	else if (input_context.input_is_pressed("move_down"))
+	
+	if (input_context.input_is_pressed("move_down"))
 	{
 		current_position.y += pos_diff;
 	}
-	else if (input_context.input_is_pressed("move_left"))
+	
+	if (input_context.input_is_pressed("move_left"))
 	{
 		current_position.x -= pos_diff;
 	}
-	else if (input_context.input_is_pressed("move_right"))
+	
+	if (input_context.input_is_pressed("move_right"))
 	{
 		current_position.x += pos_diff;
 	}

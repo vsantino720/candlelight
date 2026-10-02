@@ -1,7 +1,6 @@
 #pragma once
 
 // includes
-#include <cmath>
 #include "tilemap.h"
 
 // forward declarations
