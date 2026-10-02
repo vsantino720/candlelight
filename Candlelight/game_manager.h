@@ -2,6 +2,7 @@
 
 // includes
 #include "tilemap.h"
+#include "vector.h"
 
 // forward declarations
 class c_clobject;
@@ -45,24 +46,24 @@ private:
 	void update_objects();
 
 	// Position
-	void sanitize_tile_offset(s_tile_position* offset);
+	void sanitize_tile_offset(t_tile_position* offset);
 	void migrate_tile_offset(
-		s_tile_position* offset, 
-		const s_tilemap_position& old_pos,
-		const s_tilemap_position& new_pos);
-	void sanitize_object_position(c_clobject* obj, const s_tilemap_position& pos);
-	inline bool offset_exceeded_tile_threshold(const s_tile_position offset) const
+		t_tile_position* offset, 
+		const t_tilemap_position& old_pos,
+		const t_tilemap_position& new_pos);
+	void sanitize_object_position(c_clobject* obj, const t_tilemap_position& pos);
+	inline bool offset_exceeded_tile_threshold(const t_tile_position offset) const
 	{
 		return (offset.x < -TILE_MOVE_THRESHOLD)
 			|| (offset.x > TILE_MOVE_THRESHOLD)
 			|| (offset.y < -TILE_MOVE_THRESHOLD)
 			|| (offset.y > TILE_MOVE_THRESHOLD);
-	}
+	};
 
 	int round_to_nearest_tile(double value) const;
 
 	// Drawing
-	void draw_object(const c_clobject& obj, const s_tilemap_position& pos);
+	void draw_object(const c_clobject& obj, const t_tilemap_position& pos);
 	void draw_objects();
 	void draw_tiles();
 

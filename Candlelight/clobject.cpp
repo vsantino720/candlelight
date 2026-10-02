@@ -10,12 +10,12 @@ void c_clobject::update()
 	}
 }
 
-void c_clobject::set_relative_tile_offset(const s_tile_position& pos)
+void c_clobject::set_relative_tile_offset(const t_tile_position& pos)
 {
 	m_relative_tile_offset = pos;
 }
 
-const s_tile_position& c_clobject::get_relative_tile_offset() const
+const t_tile_position& c_clobject::get_relative_tile_offset() const
 {
 	return m_relative_tile_offset;
 }

@@ -2,10 +2,10 @@
 
 #include <SDL3/SDL.h>
 #include <string>
+#include "tilemap.h"
 
 // forward declarations
 class c_clobject;
-struct s_tilemap_position;
 
 constexpr int TILE_SIZE = 128; // pixels
 constexpr int OBJECT_SIZE = 128; // pixels
@@ -23,8 +23,8 @@ public:
 			m_window_name(window_name) {};
 
 	bool initilize_window();
-	void draw_object(const c_clobject& obj, const s_tilemap_position& pos);
-	void draw_tile(const s_tilemap_position& pos);
+	void draw_object(const c_clobject& obj, const t_tilemap_position& pos);
+	void draw_tile(const t_tilemap_position& pos);
 	void draw_background();
 	void render();
 	~c_game_renderer();

@@ -13,8 +13,6 @@ public:
 
 	inline void set_move_speed(int move_speed) { m_move_speed = move_speed; }
 private:
-	void migrate_tiles();
-
 	// Speed at which the player can move, in tiles per second
 	int m_move_speed = 0;
 };

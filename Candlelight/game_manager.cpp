@@ -146,7 +146,7 @@ void c_game_manager::update_objects()
 }
 
 // Modifies the tile offset to guarantee it fits within the tile move threshold
-void c_game_manager::sanitize_tile_offset(s_tile_position* offset)
+void c_game_manager::sanitize_tile_offset(t_tile_position* offset)
 {
 	assert(offset != nullptr);
 
@@ -158,9 +158,9 @@ void c_game_manager::sanitize_tile_offset(s_tile_position* offset)
 
 // Migrates the tile offset across tile boundary lines
 void c_game_manager::migrate_tile_offset(
-	s_tile_position* offset, 
-	const s_tilemap_position& old_pos, 
-	const s_tilemap_position& new_pos)
+	t_tile_position* offset, 
+	const t_tilemap_position& old_pos, 
+	const t_tilemap_position& new_pos)
 {
 	assert(offset != nullptr);
 
@@ -178,12 +178,12 @@ void c_game_manager::migrate_tile_offset(
 	offset->y = y_diff;
 }
 
-void c_game_manager::sanitize_object_position(c_clobject* obj, const s_tilemap_position& pos)
+void c_game_manager::sanitize_object_position(c_clobject* obj, const t_tilemap_position& pos)
 {
 	int max_tiles_x = m_current_tilemap->max_tiles_x;
 	int max_tiles_y = m_current_tilemap->max_tiles_y;
 
-	s_tile_position offset = obj->get_relative_tile_offset();
+	t_tile_position offset = obj->get_relative_tile_offset();
 
 	if (offset_exceeded_tile_threshold(offset))
 	{
@@ -233,7 +233,7 @@ int c_game_manager::round_to_nearest_tile(double value) const
 	return negative ? -rounded_value : rounded_value;
 }
 
-void c_game_manager::draw_object(const c_clobject& obj, const s_tilemap_position& pos)
+void c_game_manager::draw_object(const c_clobject& obj, const t_tilemap_position& pos)
 {
 	// Draw object using game renderer
 	assert(m_game_renderer != nullptr);

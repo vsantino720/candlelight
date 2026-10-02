@@ -161,6 +161,7 @@
     <ClInclude Include="clobject.h" />
     <ClInclude Include="player_controller_attr.h" />
     <ClInclude Include="tilemap.h" />
+    <ClInclude Include="vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

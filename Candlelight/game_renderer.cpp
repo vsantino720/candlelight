@@ -4,6 +4,7 @@
 #include "clobject.h"
 #include "game_renderer.h"
 #include "tilemap.h"
+#include "vector.h"
 
 // Initialize game window and any other necessary setup.
 bool c_game_renderer::initilize_window()
@@ -46,11 +47,11 @@ bool c_game_renderer::initilize_window()
     return true;
 }
 
-void c_game_renderer::draw_object(const c_clobject& obj, const s_tilemap_position& pos)
+void c_game_renderer::draw_object(const c_clobject& obj, const t_tilemap_position& pos)
 {
     assert(m_renderer != nullptr);
 
-    const s_tile_position offset = obj.get_relative_tile_offset();
+    const t_tile_position offset = obj.get_relative_tile_offset();
 
     // A filled rectangle - stand-in for a tile/sprite
     // until texture loading is wired up in Phase 2.
@@ -66,7 +67,7 @@ void c_game_renderer::draw_object(const c_clobject& obj, const s_tilemap_positio
     SDL_RenderFillRect(m_renderer, &filledRect);
 }
 
-void c_game_renderer::draw_tile(const s_tilemap_position& pos)
+void c_game_renderer::draw_tile(const t_tilemap_position& pos)
 {
     assert(m_renderer != nullptr);
 

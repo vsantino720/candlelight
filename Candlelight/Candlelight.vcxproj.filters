@@ -68,5 +68,8 @@
     <ClInclude Include="game_renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

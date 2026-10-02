@@ -1,27 +1,17 @@
 #pragma once
 
 #include <vector>
+#include <cmath>
 
 // forward declarations
 class c_clobject;
 
-// Struct representing a position within a tile, in tile units
-// We use floats here to allow for smooth movement between tiles, rather than snapping to tile positions.
-struct s_tile_position
-{
-	double x;
-	double y;
+template <typename T>
+struct s_vector;
 
-	inline bool is_clear() const { return x == 0.0 && y == 0.0; }
-	void clear();
-};
-
-// Struct representing a position on the tilemap
-struct s_tilemap_position
-{
-	int x;
-	int y;
-};
+// typedefs
+typedef s_vector<int> t_tilemap_position;
+typedef s_vector<float> t_tile_position;
 
 // Struct representing a tilemap in the Candlelight engine.
 struct s_tilemap

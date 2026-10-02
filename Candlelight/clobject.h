@@ -3,10 +3,10 @@
 #include <vector>
 #include <memory>
 #include "tilemap.h"
+#include "vector.h"
 
 // forward declarations
 class c_clattribute;
-struct s_tile_position;
 
 // This is a class that represents a generic object in the Candlelight engine.
 // Every object can have multiple attributes attached to it, which define its behavior and properties.
@@ -15,8 +15,8 @@ class c_clobject
 {
 public:
 	void update();
-	void set_relative_tile_offset(const s_tile_position& pos);
-	const s_tile_position& get_relative_tile_offset() const;
+	void set_relative_tile_offset(const t_tile_position& pos);
+	const t_tile_position& get_relative_tile_offset() const;
 	void clear_relative_tile_offset();
 
 	template <typename T>
@@ -31,5 +31,5 @@ private:
 	std::vector<std::unique_ptr<c_clattribute>> m_attributes;
 
 	// Distance from the current tile-center, in tile units.
-	s_tile_position m_relative_tile_offset = { 0, 0 };
+	t_tile_position m_relative_tile_offset = { 0, 0 };
 };
