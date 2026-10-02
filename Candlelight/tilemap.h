@@ -1,16 +1,18 @@
 #pragma once
 
 #include <vector>
-#include "clobject.h"
+
+// forward declarations
+class c_clobject;
 
 // Struct representing a position within a tile, in tile units
 // We use floats here to allow for smooth movement between tiles, rather than snapping to tile positions.
 struct s_tile_position
 {
-	float x;
-	float y;
+	double x;
+	double y;
 
-	inline bool is_clear() const { return x == 0.0f && y == 0.0f; }
+	inline bool is_clear() const { return x == 0.0 && y == 0.0; }
 	void clear();
 };
 
@@ -24,7 +26,7 @@ struct s_tilemap_position
 // Struct representing a tilemap in the Candlelight engine.
 struct s_tilemap
 {
-	s_tilemap(int x, int y) : max_tiles_x(x), max_tiles_y(y) {}
+	s_tilemap(int x, int y);
 	
 	// Dimensions of the tilemap in tiles. This is not the same as the
 	// screen dimensions, which are in pixels.

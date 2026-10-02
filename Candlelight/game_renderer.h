@@ -1,9 +1,13 @@
 #pragma once
 
 #include <SDL3/SDL.h>
-#include "tilemap.h"
+#include <string>
 
-#define TILE_SIZE 32 // pixels
+// forward declarations
+class c_clobject;
+struct s_tilemap_position;
+
+constexpr int TILE_SIZE = 128; // pixels
 
 // Renders game objects
 class c_game_renderer
@@ -19,6 +23,7 @@ public:
 
 	bool initilize_window();
 	void draw_object(const c_clobject& obj, const s_tilemap_position& pos);
+	void draw_tile(const s_tilemap_position& pos);
 	void draw_background();
 	void render();
 	~c_game_renderer();

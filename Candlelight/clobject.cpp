@@ -1,10 +1,12 @@
+// includes
 #include "clobject.h"
+#include "clattribute.h"
 
-void c_clobject::update(float deltaTime)
+void c_clobject::update()
 {
-	for (c_clattribute& attribute : m_attributes)
+	for (const std::unique_ptr<c_clattribute>& attribute : m_attributes)
 	{
-		attribute.update(deltaTime);
+		attribute->update();
 	}
 }
 

@@ -19,4 +19,3 @@ s_tilemap::s_tilemap(int x, int y) : max_tiles_x(x), max_tiles_y(y)
 		m_tiles[i].resize(max_tiles_y);
 	}
 }
-

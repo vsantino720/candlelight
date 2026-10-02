@@ -15,13 +15,17 @@ struct s_input_mapping
 	{
 		return input_name < other.input_name;
 	}
+
+	bool operator==(const s_input_mapping& other) const
+	{
+		return input_name == other.input_name;
+	}
 };
 
 struct s_event_mapping
 {
 	// Custom name to watch for the event name
 	std::string event_name;
-
 	// SDL type of the event we are looking for
 	SDL_EventType event_type;
 };
@@ -35,7 +39,7 @@ struct s_watched_event_entry
 class c_watched_events_cache
 {
 public:
-	c_watched_events_cache(std::vector<s_event_mapping>& event_mappings);
+	c_watched_events_cache(const std::vector<s_event_mapping>& event_mappings);
 	void clear_cache();
 	void log_event(const SDL_Event& event_type);
 	bool event_was_fired(const SDL_EventType event_type) const;
@@ -50,8 +54,8 @@ class c_input_manager
 {
 public:
 	c_input_manager(
-		std::vector<s_input_mapping>& input_mappings,
-		std::vector<s_event_mapping>& event_mappings);
+		const std::vector<s_input_mapping>& input_mappings,
+		const std::vector<s_event_mapping>& event_mappings);
 
 	bool input_is_pressed(const std::string& input_name) const;
 	bool event_was_fired(const std::string& event_name) const;
@@ -61,10 +65,10 @@ public:
 
 private:
 	// Sorted list of input mappings
-	const std::vector<s_input_mapping> m_input_mappings;
+	std::vector<s_input_mapping> m_input_mappings;
 
 	// Unsorted event mappings $TODO: Sort this list as well??
-	const std::vector<s_event_mapping> m_event_mappings;
+	std::vector<s_event_mapping> m_event_mappings;
 
 	// List of fired events from the last update
 	c_watched_events_cache m_watched_events;

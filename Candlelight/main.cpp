@@ -1,106 +1,56 @@
-// main.cpp - Minimal SDL3 window + game loop
-// This is Phase 1 of the engine: prove the toolchain works end to end
-// (CMake -> vcpkg -> SDL3 -> window -> render loop) before any
-// game-specific systems get built on top of it.
-
+// includes
+#include <iostream>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
-#include <iostream>
+#include <vector>
 
-int main(int argc, char* argv[]) {
-    // SDL3 functions return bool now (true = success) instead of SDL2's
-    // "0 or positive = success" convention.
-    if (!SDL_Init(SDL_INIT_VIDEO)) {
-        std::cerr << "SDL_Init failed: " << SDL_GetError() << std::endl;
-        return 1;
-    }
+#include "clobject.h"
+#include "input_manager.h"
+#include "game_renderer.h"
+#include "game_manager.h"
+#include "tilemap.h"
+#include "player_controller_attr.h"
 
-    // SDL3's SDL_CreateWindow dropped the x/y position parameters SDL2 had;
-    // windows are positioned by the platform by default. Use
-    // SDL_SetWindowPosition() afterward if you need explicit placement.
-    SDL_Window* window = SDL_CreateWindow(
-        "Candlelight",
-        WINDOW_WIDTH, WINDOW_HEIGHT,
-        0
-    );
+int main(int argc, char* argv[]) 
+{
+	std::vector<s_input_mapping> input_mappings = {
+		{ "move_up", SDL_SCANCODE_W },
+		{ "move_down", SDL_SCANCODE_S },
+		{ "move_left", SDL_SCANCODE_A },
+		{ "move_right", SDL_SCANCODE_D }
+	};
 
-    if (!window) {
-        std::cerr << "SDL_CreateWindow failed: " << SDL_GetError() << std::endl;
-        SDL_Quit();
-        return 1;
-    }
+	std::vector<s_event_mapping> event_mappings = {
+		{ "quit_game", SDL_EVENT_QUIT },
+	};
 
-    // SDL3's SDL_CreateRenderer takes a driver name (or NULL for the
-    // default) instead of SDL2's numeric index + flags bitmask.
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, NULL);
+	c_input_manager input_manager(input_mappings, event_mappings);
 
-    if (!renderer) {
-        std::cerr << "SDL_CreateRenderer failed: " << SDL_GetError() << std::endl;
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
+	c_clobject player_object;
+	{
+		c_player_controller_attr* player_controller_attr = 
+			player_object.new_attribute<c_player_controller_attr>();
+		player_controller_attr->set_move_speed(2); // 2 tiles per second
+	}
 
-    // VSync is now a separate call rather than a renderer creation flag.
-    SDL_SetRenderVSync(renderer, 1);
+	s_tilemap initial_tilemap(8, 6); // 8x6 tilemap
+	initial_tilemap.m_tiles[4][3] = &player_object; // Place player in the center of the tilemap
+	
+	c_game_renderer game_renderer("Candlelight", TILE_SIZE * 8, TILE_SIZE * 6);
 
-    bool running = true;
-    SDL_Event event;
+	c_game_manager* game_manager = 
+		c_game_manager::try_to_initialize_game(
+			&game_renderer, 
+			&input_manager, 
+			&initial_tilemap);
 
-    Uint64 previousTicks = SDL_GetPerformanceCounter();
-    const Uint64 frequency = SDL_GetPerformanceFrequency();
+	if (game_manager == nullptr)
+	{
+		std::cerr << "Failed to initialize game manager." << std::endl;
+		return 1;
+	}
 
-	TilePosition currentPlayerPosition{ MAX_TILES_X / 2, MAX_TILES_Y / 2 };
-	TilePosition targetPlayerPosition{ currentPlayerPosition.x, currentPlayerPosition.y };
+	const bool result = game_manager->run_game();
 
-    while (running) {
-        Uint64 currentTicks = SDL_GetPerformanceCounter();
-        double deltaTime = (double)(currentTicks - previousTicks) / (double)frequency;
-        previousTicks = currentTicks;
-
-        // --- Input ---
-        while (SDL_PollEvent(&event)) {
-            // Event type constants gained an SDL_EVENT_ prefix in SDL3
-            // (SDL_QUIT -> SDL_EVENT_QUIT, SDL_KEYDOWN -> SDL_EVENT_KEY_DOWN).
-            if (event.type == SDL_EVENT_QUIT) {
-                running = false;
-            }
-            // The nested event.key.keysym.sym from SDL2 is gone; SDL3
-            // flattens it to event.key.key directly.
-            if (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_ESCAPE) {
-                running = false;
-            }
-        }
-
-        // --- Update ---
-        // TODO: world/state update goes here, driven by deltaTime.
-        (void)deltaTime;
-
-        // --- Render ---
-        SDL_SetRenderDrawColor(renderer, 24, 24, 32, 255);
-        SDL_RenderClear(renderer);
-
-        // A filled rectangle, roughly centered - stand-in for a tile/sprite
-        // until texture loading is wired up in Phase 2.
-        SDL_FRect filledRect
-        {
-            playerPosition.x - (TILE_SIZE / 2.0f),
-            playerPosition.y - (TILE_SIZE / 2.0f),
-            (float)TILE_SIZE,
-            (float)TILE_SIZE
-        };
-
-        SDL_SetRenderDrawColor(renderer, 220, 60, 60, 255);
-        SDL_RenderFillRect(renderer, &filledRect);
-
-        // TODO: draw tilemap, entities, UI here.
-
-        SDL_RenderPresent(renderer);
-    }
-
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-
-    return 0;
+    return result ? 0 : 1;
 }

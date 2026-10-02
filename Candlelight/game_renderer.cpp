@@ -1,6 +1,9 @@
-#include "game_renderer.h"
-#include <iostream>
+// includes
 #include <assert.h>
+#include <iostream>
+#include "clobject.h"
+#include "game_renderer.h"
+#include "tilemap.h"
 
 // Initialize game window and any other necessary setup.
 bool c_game_renderer::initilize_window()
@@ -39,6 +42,8 @@ bool c_game_renderer::initilize_window()
 
     // VSync is now a separate call rather than a renderer creation flag.
     SDL_SetRenderVSync(m_renderer, 1);
+
+    return true;
 }
 
 void c_game_renderer::draw_object(const c_clobject& obj, const s_tilemap_position& pos)
@@ -47,22 +52,36 @@ void c_game_renderer::draw_object(const c_clobject& obj, const s_tilemap_positio
 
     const s_tile_position offset = obj.get_relative_tile_offset();
 
-    // --- Render ---
-    SDL_SetRenderDrawColor(m_renderer, 24, 24, 32, 255);
-    SDL_RenderClear(m_renderer);
-
     // A filled rectangle, roughly centered - stand-in for a tile/sprite
     // until texture loading is wired up in Phase 2.
     SDL_FRect filledRect
     {
-        ((pos.x + offset.x) * TILE_SIZE) - (TILE_SIZE / 2.0f),
-        ((pos.y + offset.y) * TILE_SIZE) - (TILE_SIZE / 2.0f),
+        ((pos.x + offset.x) * TILE_SIZE),
+        ((pos.y + offset.y) * TILE_SIZE),
         (float)TILE_SIZE,
         (float)TILE_SIZE
     };
 
     SDL_SetRenderDrawColor(m_renderer, 220, 60, 60, 255);
     SDL_RenderFillRect(m_renderer, &filledRect);
+}
+
+void c_game_renderer::draw_tile(const s_tilemap_position& pos)
+{
+    assert(m_renderer != nullptr);
+
+    // A filled rectangle, roughly centered - stand-in for a tile/sprite
+    // until texture loading is wired up in Phase 2.
+    SDL_FRect outlinedRect
+    {
+        (pos.x * TILE_SIZE),
+        (pos.y * TILE_SIZE),
+        (float)TILE_SIZE,
+        (float)TILE_SIZE
+    };
+
+    SDL_SetRenderDrawColor(m_renderer, 90, 200, 120, 255);
+    SDL_RenderRect(m_renderer, &outlinedRect);
 }
 
 // $TODO: Support colors, textures, etc.

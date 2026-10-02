@@ -1,35 +1,44 @@
+// includes
+#include "clobject.h"
+#include "game_manager.h"
+#include "input_manager.h"
 #include "player_controller_attr.h"
-#include <SDL3/SDL.h>
+#include "tilemap.h"
 
-void c_player_controller_attr::update(float deltaTime)
+void c_player_controller_attr::update()
 {
+	const double delta_time = c_game_manager::get_instance().get_delta_time();
+
 	// Update the player's target position based on input
 	const c_input_manager& input_context = 
 		c_game_manager::get_instance().get_readonly_input_context();
 
-	s_tile_position current_position = m_owner.get_relative_tile_offset();
+	s_tile_position current_position = m_owner->get_relative_tile_offset();
 
 	// Handle the case where the player is not moving.
 	// In our tile game, we only allow the player to 
 	// move when they are not already moving. This prevents 
 	// the player from changing direction mid-move.
+
+	const bool is_moving = !current_position.is_clear();
+	const double pos_diff = m_move_speed * delta_time;
 		
-	if (current_position.y < 0.0f || input_context.input_is_pressed("move_up"))
+	if (input_context.input_is_pressed("move_up"))
 	{
-		current_position.y -= m_move_speed * deltaTime;
+		current_position.y -= pos_diff;
 	}
-	else if (current_position.y > 0.0f || input_context.input_is_pressed("move_down"))
+	else if (input_context.input_is_pressed("move_down"))
 	{
-		current_position.y += m_move_speed * deltaTime;
+		current_position.y += pos_diff;
 	}
-	else if (current_position.x < 0.0f || input_context.input_is_pressed("move_left"))
+	else if (input_context.input_is_pressed("move_left"))
 	{
-		current_position.x -= m_move_speed * deltaTime;
+		current_position.x -= pos_diff;
 	}
-	else if (current_position.x > 0.0f || input_context.input_is_pressed("move_right"))
+	else if (input_context.input_is_pressed("move_right"))
 	{
-		current_position.x += m_move_speed * deltaTime;
+		current_position.x += pos_diff;
 	}
 
-	m_owner.set_relative_tile_offset(current_position);
+	m_owner->set_relative_tile_offset(current_position);
 }
