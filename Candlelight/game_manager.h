@@ -34,8 +34,8 @@ public:
 	void set_current_tilemap(s_tilemap* tilemap);
 	void set_game_renderer(c_game_renderer* game_renderer);
 
-	// Read-only access to the input context for external systems that need to query input state.
-	const c_input_manager& get_readonly_input_context() const;
+	// Read-only access to the input manager for external systems that need to query input state.
+	const c_input_manager& get_readonly_input_manager() const;
 	inline const double get_delta_time() const { return m_delta_time; }
 
 private:
@@ -60,12 +60,9 @@ private:
 			|| (offset.y > TILE_MOVE_THRESHOLD);
 	};
 
-	int round_to_nearest_tile(double value) const;
-
-	// Drawing
-	void draw_object(const c_clobject& obj, const t_tilemap_position& pos);
-	void draw_objects();
-	void draw_tiles();
+	// Round to nearest tile by adding TILE_MOVE_THRESHOLD and flooring the result
+	// This first translates from human-readable tile-space into the 0-indexed tile-space.
+	inline int round_to_nearest_tile(float value) const { return std::floor(value + TILE_MOVE_THRESHOLD); }
 
 	// member variables
 	// Current tilemap to render and update.

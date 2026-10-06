@@ -41,7 +41,7 @@ bool c_game_manager::run_game()
 
 	bool result = true;
 
-	result = m_game_renderer->initilize_window();
+	result = m_game_renderer->initialize_window();
 
 	if (result)
 	{
@@ -61,9 +61,9 @@ bool c_game_manager::run_game()
 			{
 				m_input_context->update();
 
-				m_input_context->event_was_fired(QUIT_GAME_EVENT_NAME)
-					? running = false
-					: running = true;
+				running = m_input_context->event_was_fired(QUIT_GAME_EVENT_NAME)
+					? false
+					: true;
 			}
 
 			// --- Update ---
@@ -73,9 +73,10 @@ bool c_game_manager::run_game()
 
 			// --- Render ---
 			{
-				m_game_renderer->draw_background();
-				draw_tiles();
-				draw_objects();
+				m_game_renderer->update();
+				m_game_renderer->draw_tilemap_from_viewpoint(
+					*m_current_tilemap,
+					{ 8.0f, 4.0f }); // $TODO: Add camera support
 				m_game_renderer->render();
 			}
 		}
@@ -90,7 +91,7 @@ const c_game_manager& c_game_manager::get_instance()
 	return *m_instance;
 }
 
-const c_input_manager& c_game_manager::get_readonly_input_context() const
+const c_input_manager& c_game_manager::get_readonly_input_manager() const
 {
 	return const_cast<const c_input_manager&>(get_input_context());
 }
@@ -216,63 +217,5 @@ void c_game_manager::sanitize_object_position(c_clobject* obj, const t_tilemap_p
 		}
 
 		obj->set_relative_tile_offset(offset);
-	}
-}
-
-int c_game_manager::round_to_nearest_tile(double value) const
-{
-	bool negative = value < 0;
-
-	value = std::abs(value);
-	int value_cieling = std::ceil(value);
-
-	int rounded_value = ((value_cieling - value) < TILE_MOVE_THRESHOLD) 
-		? value_cieling
-		: std::floor(value);
-
-	return negative ? -rounded_value : rounded_value;
-}
-
-void c_game_manager::draw_object(const c_clobject& obj, const t_tilemap_position& pos)
-{
-	// Draw object using game renderer
-	assert(m_game_renderer != nullptr);
-	m_game_renderer->draw_object(obj, pos);
-}
-
-void c_game_manager::draw_objects()
-{
-	assert(m_current_tilemap != nullptr);
-	int max_tiles_x = m_current_tilemap->max_tiles_x;
-	int max_tiles_y = m_current_tilemap->max_tiles_y;
-
-	for (int x = 0; x < max_tiles_x; ++x)
-	{
-		for (int y = 0; y < max_tiles_y; ++y)
-		{
-			c_clobject* obj = m_current_tilemap->m_tiles[x][y];
-			if (obj != nullptr)
-			{
-				draw_object(*obj, { x, y });
-			}
-		}
-	}
-}
-
-// Used for debugging purposes to visualize tile boundaries
-void c_game_manager::draw_tiles()
-{
-	assert(m_current_tilemap != nullptr);
-	int max_tiles_x = m_current_tilemap->max_tiles_x;
-	int max_tiles_y = m_current_tilemap->max_tiles_y;
-
-	for (int x = 0; x < max_tiles_x; ++x)
-	{
-		for (int y = 0; y < max_tiles_y; ++y)
-		{
-			// Draw empty tile for debugging purposes
-			assert(m_game_renderer != nullptr);
-			m_game_renderer->draw_tile({ x, y });
-		}
 	}
 }

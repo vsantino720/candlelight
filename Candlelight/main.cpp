@@ -33,10 +33,10 @@ int main(int argc, char* argv[])
 		player_controller_attr->set_move_speed(2); // 2 tiles per second
 	}
 
-	s_tilemap initial_tilemap(8, 6); // 8x6 tilemap
-	initial_tilemap.m_tiles[4][3] = &player_object; // Place player in the center of the tilemap
+	s_tilemap initial_tilemap(16, 9); // 8x6 tilemap
+	initial_tilemap.m_tiles[8][4] = &player_object; // Place player in the center of the tilemap
 	
-	c_game_renderer game_renderer("Candlelight", TILE_SIZE * 8, TILE_SIZE * 6);
+	c_game_renderer game_renderer("Candlelight", 1600, 900);
 
 	c_game_manager* game_manager = 
 		c_game_manager::try_to_initialize_game(
