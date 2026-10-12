@@ -194,7 +194,7 @@ void c_game_manager::sanitize_object_position(c_clobject* obj, const t_tilemap_p
 		int new_x = round_to_nearest_tile(pos.x + offset.x);
 		int new_y = round_to_nearest_tile(pos.y + offset.y);
 
-		// If either exceeds the maximum tilemap bounds, we will clamp 
+		// If either exceeds the maximum tilemap bounds, we will clamp
 		// the position to the maximum tilemap bounds.
 		new_x = std::clamp(new_x, 0, max_tiles_x - 1);
 		new_y = std::clamp(new_y, 0, max_tiles_y - 1);

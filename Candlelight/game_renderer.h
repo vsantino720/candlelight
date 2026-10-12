@@ -4,6 +4,9 @@
 #include <string>
 #include "tilemap.h"
 
+// macros
+#define DEBUG_ENABLED
+
 // forward declarations
 class c_clobject;
 

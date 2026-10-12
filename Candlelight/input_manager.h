@@ -45,7 +45,7 @@ public:
 	bool event_was_fired(const SDL_EventType event_type) const;
 private:
 	// List of events triggered within last update
-	// $TODO: Sort this list for accelerated searching??
+	// $TODO: Sort this list for accelerated searching? Not necessary at the moment, but if this grows, revisit.
 	std::vector<s_watched_event_entry> m_watched_events_cache;
 };
 

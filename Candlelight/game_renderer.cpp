@@ -62,7 +62,8 @@ void c_game_renderer::draw_tilemap_from_viewpoint(const s_tilemap& tilemap, cons
 	const int max_tiles_x = tilemap.max_tiles_x;
 	const int max_tiles_y = tilemap.max_tiles_y;
 
-	// For each tile, determine screen-space position and draw it if it's within the viewable area.
+#ifdef DEBUG_ENABLED
+    // For each tile, determine screen-space position and draw it if it's within the viewable area.
     for (int x = 0; x < max_tiles_x; ++x)
     {
         for (int y = 0; y < max_tiles_y; ++y)
@@ -80,6 +81,7 @@ void c_game_renderer::draw_tilemap_from_viewpoint(const s_tilemap& tilemap, cons
             try_to_draw_tile(tile_screen_pos);
         }
     }
+#endif
 
     for (int x = 0; x < max_tiles_x; ++x)
     {
