@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 	{
 		c_player_controller_attr* player_controller_attr = 
 			player_object.new_attribute<c_player_controller_attr>();
-		player_controller_attr->set_move_speed(2); // 2 tiles per second
+		player_controller_attr->set_move_speed(3); // 2 tiles per second
 	}
 
 	s_tilemap initial_tilemap(16, 9); // 8x6 tilemap

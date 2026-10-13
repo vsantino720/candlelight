@@ -132,11 +132,10 @@ t_screen_tile_position c_game_renderer::tilemap_to_screen_tile_position(
     // 
     // Translate by (-pos.x, -pos.y) to center the view on the given position
     // Translate by (m_view_width / 2, m_view_height / 2) to center the view on the screen
-    // Translate by (0.5, 0.5) to center the tile on the screen
     t_screen_tile_position screen_pos =
     {
-        (tilemap_pos.x - viewpoint_pos.x + (m_view_width / 2) + 0.5f),
-        (tilemap_pos.y - viewpoint_pos.y + (m_view_height / 2) + 0.5f)
+        (tilemap_pos.x - viewpoint_pos.x + (m_view_width / 2.0f)),
+        (tilemap_pos.y - viewpoint_pos.y + (m_view_height / 2.0f))
     };
 
     return screen_pos;

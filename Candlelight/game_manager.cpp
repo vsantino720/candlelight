@@ -165,18 +165,11 @@ void c_game_manager::migrate_tile_offset(
 {
 	assert(offset != nullptr);
 
-	// $NOTE: MOST of the time speed will be slow enough such that we always catch this exactly at
-	// offset 0.05f, but we cover the the additional case as well for things like teleportation or
-	// slow operation.
+	const s_vector<float> old_tilemap_position = { old_pos.x + offset->x, old_pos.y + offset->y };
+	const s_vector<float> new_tile_tilemap_position = { (float)new_pos.x, (float)new_pos.y };
 
-	const double current_x = old_pos.x + offset->x;
-	const double current_y = old_pos.y + offset->y;
-
-	const double x_diff = current_x - new_pos.x;
-	const double y_diff = current_y - new_pos.y;
-
-	offset->x = x_diff;
-	offset->y = y_diff;
+	// Calculates distance to center point of new tile relative to the new tile center
+	*offset = old_tilemap_position - new_tile_tilemap_position;
 }
 
 void c_game_manager::sanitize_object_position(c_clobject* obj, const t_tilemap_position& pos)
@@ -218,4 +211,22 @@ void c_game_manager::sanitize_object_position(c_clobject* obj, const t_tilemap_p
 
 		obj->set_relative_tile_offset(offset);
 	}
+}
+
+int c_game_manager::round_to_nearest_tile(float value) const
+{
+	int result = static_cast<int>(value);
+
+	float fraction = fmod(value, 1);
+
+	if (fraction > TILE_MOVE_THRESHOLD)
+	{
+		result = std::ceil(value);
+	}
+	else if (fraction < -TILE_MOVE_THRESHOLD)
+	{
+		result = std::floor(value);
+	}
+
+	return result;
 }

@@ -22,7 +22,7 @@ struct s_vector
 
 	// Operators
 
-	s_vector<T> operator*(T scalar)
+	s_vector<T> operator*(T scalar) const
 	{
 		return { x * scalar, y * scalar };
 	}
@@ -34,12 +34,12 @@ struct s_vector
 		return *this;
 	}
 
-	s_vector<T> operator+(const s_vector<T>& other)
+	s_vector<T> operator+(const s_vector<T>& other) const
 	{
 		return { x + other.x, y + other.y };
 	}
 
-	s_vector<T> operator-(const s_vector<T>& other)
+	s_vector<T> operator-(const s_vector<T>& other) const
 	{
 		return { x - other.x, y - other.y };
 	}

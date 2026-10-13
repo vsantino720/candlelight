@@ -52,6 +52,8 @@ private:
 		const t_tilemap_position& old_pos,
 		const t_tilemap_position& new_pos);
 	void sanitize_object_position(c_clobject* obj, const t_tilemap_position& pos);
+	int round_to_nearest_tile(float value) const;
+
 	inline bool offset_exceeded_tile_threshold(const t_tile_position offset) const
 	{
 		return (offset.x < -TILE_MOVE_THRESHOLD)
@@ -60,14 +62,12 @@ private:
 			|| (offset.y > TILE_MOVE_THRESHOLD);
 	};
 
-	// Round to nearest tile by adding TILE_MOVE_THRESHOLD and flooring the result
-	// This first translates from human-readable tile-space into the 0-indexed tile-space.
-	inline int round_to_nearest_tile(float value) const { return std::floor(value + TILE_MOVE_THRESHOLD); }
-
 	// member variables
 	// Current tilemap to render and update.
 	s_tilemap* m_current_tilemap = nullptr;
 	c_game_renderer* m_game_renderer = nullptr;
 	c_input_manager* m_input_context = nullptr;
+
+	// Time since last frame
 	double m_delta_time = 0.0;
 };
