@@ -40,7 +40,7 @@ public:
 
 private:
 	inline t_screen_dimensions get_tile_size() const
-	{ 
+	{
 		return 
 		{ 
 			(float)m_window_width / (float)m_view_width, 

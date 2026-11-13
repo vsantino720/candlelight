@@ -57,9 +57,9 @@ private:
 	inline bool offset_exceeded_tile_threshold(const t_tile_position offset) const
 	{
 		return (offset.x < -TILE_MOVE_THRESHOLD)
-			|| (offset.x > TILE_MOVE_THRESHOLD)
+			|| (offset.x >= TILE_MOVE_THRESHOLD)
 			|| (offset.y < -TILE_MOVE_THRESHOLD)
-			|| (offset.y > TILE_MOVE_THRESHOLD);
+			|| (offset.y >= TILE_MOVE_THRESHOLD);
 	};
 
 	// member variables
