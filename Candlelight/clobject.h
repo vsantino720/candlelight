@@ -31,5 +31,5 @@ private:
 	std::vector<std::unique_ptr<c_clattribute>> m_attributes;
 
 	// Distance from the current tile-center, in tile units.
-	t_tile_position m_relative_tile_offset = { 0, 0 };
+	t_tile_position m_relative_tile_offset = { 0.5f, 0.5f };
 };

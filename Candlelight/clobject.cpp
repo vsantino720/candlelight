@@ -22,5 +22,5 @@ const t_tile_position& c_clobject::get_relative_tile_offset() const
 
 void c_clobject::clear_relative_tile_offset()
 {
-	m_relative_tile_offset = { 0, 0 };
+	m_relative_tile_offset = { 0.5f, 0.5f };
 }

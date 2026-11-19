@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <assert.h>
 #include <cmath>
+#include <queue>
 #include <SDL3/SDL.h>
 #include "clobject.h"
 #include "game_manager.h"
@@ -127,6 +128,8 @@ void c_game_manager::update_objects()
 		int max_tiles_x = m_current_tilemap->max_tiles_x;
 		int max_tiles_y = m_current_tilemap->max_tiles_y;
 
+		std::queue<s_tilemap_object> update_queue;
+
 		for (int x = 0; x < max_tiles_x; ++x)
 		{
 			for (int y = 0; y < max_tiles_y; ++y)
@@ -135,13 +138,24 @@ void c_game_manager::update_objects()
 
 				if (obj != nullptr)
 				{
-					// Run the update function for the object, which will in turn update its attributes
-					obj->update();
-
-					// Check if the object has moved to a new tile, and enforce collision and tilebounds
-					sanitize_object_position(obj, { x, y });
+					s_tilemap_object tilemap_object = { obj,{ x, y } };
+					update_queue.push(tilemap_object);
 				}
 			}
+		}
+
+		while (!update_queue.empty())
+		{
+			s_tilemap_object tilemap_object = update_queue.front();
+			update_queue.pop();
+
+			c_clobject* obj = tilemap_object.object;
+
+			// Run the update function for the object, which will in turn update its attributes
+			obj->update();
+
+			// Check if the object has moved to a new tile, and enforce collision and tilebounds
+			sanitize_object_position(tilemap_object);
 		}
 	}
 }
@@ -151,9 +165,9 @@ void c_game_manager::sanitize_tile_offset(t_tile_position* offset)
 {
 	assert(offset != nullptr);
 
-	offset->x = (offset->x < -TILE_MOVE_THRESHOLD) ? -TILE_MOVE_THRESHOLD : offset->x;
+	offset->x = (offset->x < 0) ? 0 : offset->x;
 	offset->x = (offset->x > TILE_MOVE_THRESHOLD) ? TILE_MOVE_THRESHOLD : offset->x;
-	offset->y = (offset->y < -TILE_MOVE_THRESHOLD) ? -TILE_MOVE_THRESHOLD : offset->y;
+	offset->y = (offset->y < 0) ? 0 : offset->y;
 	offset->y = (offset->y > TILE_MOVE_THRESHOLD) ? TILE_MOVE_THRESHOLD : offset->y;
 }
 
@@ -172,8 +186,11 @@ void c_game_manager::migrate_tile_offset(
 	*offset = old_tilemap_position - new_tile_tilemap_position;
 }
 
-void c_game_manager::sanitize_object_position(c_clobject* obj, const t_tilemap_position& pos)
+void c_game_manager::sanitize_object_position(s_tilemap_object tilemap_object)
 {
+	c_clobject* obj = tilemap_object.object;
+	t_tilemap_position pos = tilemap_object.position;
+
 	int max_tiles_x = m_current_tilemap->max_tiles_x;
 	int max_tiles_y = m_current_tilemap->max_tiles_y;
 
@@ -184,8 +201,8 @@ void c_game_manager::sanitize_object_position(c_clobject* obj, const t_tilemap_p
 		// $TODO: Handle case where speed is fast enough that we actually cross multiple tile borders in one frame???
 		// i.e. teleportation support? How do we resolve collisions? Remain at the original spot or find adjacent free spot?
 
-		int new_x = round_to_nearest_tile(pos.x + offset.x);
-		int new_y = round_to_nearest_tile(pos.y + offset.y);
+		int new_x = static_cast<int>(pos.x + offset.x);
+		int new_y = static_cast<int>(pos.y + offset.y);
 
 		// If either exceeds the maximum tilemap bounds, we will clamp
 		// the position to the maximum tilemap bounds.
@@ -211,22 +228,4 @@ void c_game_manager::sanitize_object_position(c_clobject* obj, const t_tilemap_p
 
 		obj->set_relative_tile_offset(offset);
 	}
-}
-
-int c_game_manager::round_to_nearest_tile(float value) const
-{
-	int result = static_cast<int>(value);
-
-	float fraction = fmod(value, 1);
-
-	if (fraction > TILE_MOVE_THRESHOLD)
-	{
-		result = std::ceil(value);
-	}
-	else if (fraction < -TILE_MOVE_THRESHOLD)
-	{
-		result = std::floor(value);
-	}
-
-	return result;
 }

@@ -10,8 +10,14 @@ class c_game_renderer;
 class c_input_manager;
 
 // Distance in tiles that an object must move before it is considered to have moved to a new tile.
-constexpr float TILE_MOVE_THRESHOLD = 0.5f;
+constexpr float TILE_MOVE_THRESHOLD = 1.0f;
 constexpr const char* QUIT_GAME_EVENT_NAME = "quit_game";
+
+struct s_tilemap_object
+{
+	c_clobject* object;
+	t_tilemap_position position;
+};
 
 // Game manager singleton handles all update loop logic on downstream objects, active tilemap,
 // and tilemap transitions.
@@ -51,15 +57,14 @@ private:
 		t_tile_position* offset, 
 		const t_tilemap_position& old_pos,
 		const t_tilemap_position& new_pos);
-	void sanitize_object_position(c_clobject* obj, const t_tilemap_position& pos);
-	int round_to_nearest_tile(float value) const;
+	void sanitize_object_position(s_tilemap_object tilemap_object);
 
 	inline bool offset_exceeded_tile_threshold(const t_tile_position offset) const
 	{
-		return (offset.x < -TILE_MOVE_THRESHOLD)
-			|| (offset.x >= TILE_MOVE_THRESHOLD)
-			|| (offset.y < -TILE_MOVE_THRESHOLD)
-			|| (offset.y >= TILE_MOVE_THRESHOLD);
+		return (offset.x < 0)
+			|| (offset.x > TILE_MOVE_THRESHOLD)
+			|| (offset.y < 0)
+			|| (offset.y > TILE_MOVE_THRESHOLD);
 	};
 
 	// member variables

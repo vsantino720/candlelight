@@ -193,8 +193,8 @@ void c_game_renderer::try_to_draw_tile(const t_screen_tile_position& screen_pos)
     {
         SDL_FRect outlinedRect
         {
-            ((screen_pos.x - 0.5f) * tile_size.x),
-            ((screen_pos.y - 0.5f) * tile_size.y),
+            ((screen_pos.x) * tile_size.x),
+            ((screen_pos.y) * tile_size.y),
             (float)tile_size.x,
             (float)tile_size.y
         };
