@@ -8,6 +8,7 @@
 class c_clobject;
 class c_game_renderer;
 class c_input_manager;
+class c_clobject_repository;
 
 // Distance in tiles that an object must move before it is considered to have moved to a new tile.
 constexpr float TILE_MOVE_THRESHOLD = 1.0f;
@@ -15,7 +16,7 @@ constexpr const char* QUIT_GAME_EVENT_NAME = "quit_game";
 
 struct s_tilemap_object
 {
-	c_clobject* object;
+	t_clobject_id object;
 	t_tilemap_position position;
 };
 
@@ -29,6 +30,7 @@ public:
 	static c_game_manager* try_to_initialize_game(
 		c_game_renderer* game_renderer,
 		c_input_manager* input_context,
+		c_clobject_repository* clobject_repository,
 		s_tilemap* initial_tilemap);
 	static const c_game_manager& get_instance();
 
@@ -36,9 +38,12 @@ public:
 
 	// Getters and setters
 	c_input_manager& get_input_context() const;
+	const c_clobject* try_to_get_readonly_object(const t_clobject_id id) const;
+	const c_clobject& get_readonly_object(const t_clobject_id id) const;
 	void set_input_context(c_input_manager* input_context);
 	void set_current_tilemap(s_tilemap* tilemap);
 	void set_game_renderer(c_game_renderer* game_renderer);
+	void set_clobject_repository(c_clobject_repository* clobject_repository);
 
 	// Read-only access to the input manager for external systems that need to query input state.
 	const c_input_manager& get_readonly_input_manager() const;
@@ -57,7 +62,7 @@ private:
 		t_tile_position* offset, 
 		const t_tilemap_position& old_pos,
 		const t_tilemap_position& new_pos);
-	void sanitize_object_position(s_tilemap_object tilemap_object);
+	void sanitize_object_position(c_clobject* obj, const t_tilemap_position& position);
 
 	inline bool offset_exceeded_tile_threshold(const t_tile_position offset) const
 	{
@@ -72,6 +77,7 @@ private:
 	s_tilemap* m_current_tilemap = nullptr;
 	c_game_renderer* m_game_renderer = nullptr;
 	c_input_manager* m_input_context = nullptr;
+	c_clobject_repository* m_clobject_repository = nullptr;
 
 	// Time since last frame
 	double m_delta_time = 0.0;

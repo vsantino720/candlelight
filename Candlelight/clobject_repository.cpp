@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <assert.h>
 #include "clobject_repository.h"
+#include "clattribute.h"
 
 // c_clobject_lookup_table
 
@@ -27,10 +28,13 @@ const t_clobject_pool_index c_clobject_lookup_table::try_to_get_pool_index_for_i
 {
 	t_clobject_pool_index pool_index = -1;
 
-	auto it = std::lower_bound(m_sorted_entries.begin(), m_sorted_entries.end(), id);
-	if (it != m_sorted_entries.end() && it->id == id) 
+	if (id != INVALID_ID)
 	{
-		pool_index = it->index;
+		auto it = std::lower_bound(m_sorted_entries.begin(), m_sorted_entries.end(), id);
+		if (it != m_sorted_entries.end() && it->id == id)
+		{
+			pool_index = it->index;
+		}
 	}
 
 	return pool_index;

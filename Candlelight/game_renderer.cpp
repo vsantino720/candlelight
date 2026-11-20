@@ -3,6 +3,7 @@
 #include <iostream>
 #include "clobject.h"
 #include "game_renderer.h"
+#include "game_manager.h"
 #include "tilemap.h"
 #include "vector.h"
 
@@ -87,7 +88,9 @@ void c_game_renderer::draw_tilemap_from_viewpoint(const s_tilemap& tilemap, cons
     {
         for (int y = 0; y < max_tiles_y; ++y)
         {
-            const c_clobject* obj = tilemap.m_tiles[x][y];
+            const c_clobject* obj = 
+                c_game_manager::get_instance()
+                    .try_to_get_readonly_object(tilemap.m_tiles[x][y]);
 
             if (obj != nullptr)
             {

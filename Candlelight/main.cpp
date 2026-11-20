@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "clobject.h"
+#include "clobject_repository.h"
 #include "input_manager.h"
 #include "game_renderer.h"
 #include "game_manager.h"
@@ -26,15 +27,16 @@ int main(int argc, char* argv[])
 
 	c_input_manager input_manager(input_mappings, event_mappings);
 
-	c_clobject player_object;
+	c_clobject_repository clobject_repository;
+	c_clobject* player_object = clobject_repository.try_to_create_object(); // Create a player object in the repository
 	{
 		c_player_controller_attr* player_controller_attr = 
-			player_object.new_attribute<c_player_controller_attr>();
+			player_object->new_attribute<c_player_controller_attr>();
 		player_controller_attr->set_move_speed(3); // 2 tiles per second
 	}
 
 	s_tilemap initial_tilemap(16, 9); // 8x6 tilemap
-	initial_tilemap.m_tiles[8][4] = &player_object; // Place player in the center of the tilemap
+	initial_tilemap.m_tiles[8][4] = player_object->get_id(); // Place player in the center of the tilemap
 	
 	c_game_renderer game_renderer("Candlelight", 1600, 900);
 
@@ -42,6 +44,7 @@ int main(int argc, char* argv[])
 		c_game_manager::try_to_initialize_game(
 			&game_renderer, 
 			&input_manager, 
+			&clobject_repository,
 			&initial_tilemap);
 
 	if (game_manager == nullptr)

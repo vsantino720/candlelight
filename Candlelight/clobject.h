@@ -9,7 +9,7 @@
 class c_clattribute;
 
 typedef int t_clobject_id;
-constexpr int INVALID_ID = -1;
+constexpr int INVALID_ID = 0;
 
 // This is a class that represents a generic object in the Candlelight engine.
 // Every object can have multiple attributes attached to it, which define its behavior and properties.

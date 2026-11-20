@@ -24,6 +24,16 @@ struct s_clobject_lookup_entry
 	{
 		return id == other.id;
 	}
+
+	bool operator<(const t_clobject_id& other_id) const
+	{
+		return id < other_id;
+	}
+
+	bool operator==(const t_clobject_id& other_id) const
+	{
+		return id == other_id;
+	}
 };
 
 class c_clobject_lookup_table
@@ -63,5 +73,5 @@ private:
 	// Stack of free indices in the objects pool
 	std::stack<t_clobject_pool_index> m_free_indices;
 
-	t_clobject_id m_next_id = 0; // Next unique ID to assign to a new c_clobject instance.
+	t_clobject_id m_next_id = 1; // Next unique ID to assign to a new c_clobject instance.
 };

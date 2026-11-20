@@ -2,9 +2,11 @@
 #include <algorithm>
 #include <assert.h>
 #include <cmath>
+#include <iostream>
 #include <queue>
 #include <SDL3/SDL.h>
 #include "clobject.h"
+#include "clobject_repository.h"
 #include "game_manager.h"
 #include "game_renderer.h"
 #include "input_manager.h"
@@ -19,6 +21,7 @@ c_game_manager* c_game_manager::m_instance = nullptr;
 c_game_manager* c_game_manager::try_to_initialize_game(
 	c_game_renderer* game_renderer,
 	c_input_manager* input_context,
+	c_clobject_repository* clobject_repository,
 	s_tilemap* initial_tilemap)
 {
 	if (m_instance == nullptr)
@@ -29,6 +32,7 @@ c_game_manager* c_game_manager::try_to_initialize_game(
 	m_instance->set_input_context(input_context);
 	m_instance->set_game_renderer(game_renderer);
 	m_instance->set_current_tilemap(initial_tilemap);
+	m_instance->set_clobject_repository(clobject_repository);
 
 	return m_instance;
 }
@@ -39,6 +43,7 @@ bool c_game_manager::run_game()
 	assert(m_game_renderer != nullptr);
 	assert(m_input_context != nullptr);
 	assert(m_current_tilemap != nullptr);
+	assert(m_clobject_repository != nullptr);
 
 	bool result = true;
 
@@ -103,6 +108,20 @@ c_input_manager& c_game_manager::get_input_context() const
 	return *m_input_context;
 }
 
+const c_clobject* c_game_manager::try_to_get_readonly_object(const t_clobject_id id) const
+{
+	assert(m_clobject_repository != nullptr);
+	const c_clobject* obj = m_clobject_repository->try_to_get_object(id);
+	return obj;
+}
+
+const c_clobject& c_game_manager::get_readonly_object(const t_clobject_id id) const
+{
+	assert(m_clobject_repository != nullptr);
+	const c_clobject* obj = m_clobject_repository->get_object(id);
+	return *obj;
+}
+
 void c_game_manager::set_current_tilemap(s_tilemap* tilemap)
 {
 	m_current_tilemap = tilemap;
@@ -118,6 +137,11 @@ void c_game_manager::set_game_renderer(c_game_renderer* game_renderer)
 	m_game_renderer = game_renderer;
 }
 
+void c_game_manager::set_clobject_repository(c_clobject_repository* clobject_repository)
+{
+	m_clobject_repository = clobject_repository;
+}
+
 // private methods
 
 void c_game_manager::update_objects()
@@ -128,17 +152,17 @@ void c_game_manager::update_objects()
 		int max_tiles_x = m_current_tilemap->max_tiles_x;
 		int max_tiles_y = m_current_tilemap->max_tiles_y;
 
+		//$TODO: Should we just loop the clobject repository instead of the tilemap?
 		std::queue<s_tilemap_object> update_queue;
 
 		for (int x = 0; x < max_tiles_x; ++x)
 		{
 			for (int y = 0; y < max_tiles_y; ++y)
 			{
-				c_clobject* obj = m_current_tilemap->m_tiles[x][y];
-
-				if (obj != nullptr)
+				if (m_current_tilemap->m_tiles[x][y] != INVALID_ID)
 				{
-					s_tilemap_object tilemap_object = { obj,{ x, y } };
+					t_clobject_id obj_id = m_current_tilemap->m_tiles[x][y];
+					s_tilemap_object tilemap_object = { obj_id,{ x, y } };
 					update_queue.push(tilemap_object);
 				}
 			}
@@ -149,13 +173,21 @@ void c_game_manager::update_objects()
 			s_tilemap_object tilemap_object = update_queue.front();
 			update_queue.pop();
 
-			c_clobject* obj = tilemap_object.object;
+			c_clobject* obj = m_clobject_repository->try_to_get_object(tilemap_object.object);
 
-			// Run the update function for the object, which will in turn update its attributes
-			obj->update();
+			if (obj != nullptr)
+			{
+				// Run the update function for the object, which will in turn update its attributes
+				obj->update();
 
-			// Check if the object has moved to a new tile, and enforce collision and tilebounds
-			sanitize_object_position(tilemap_object);
+				// Check if the object has moved to a new tile, and enforce collision and tilebounds
+				sanitize_object_position(obj, tilemap_object.position);
+			}
+			else
+			{
+				std::cerr << "Error: Object with ID at position " << tilemap_object.position.x << "," 
+					<< tilemap_object.position.y << " not found in repository." << std::endl;
+			}
 		}
 	}
 }
@@ -186,11 +218,8 @@ void c_game_manager::migrate_tile_offset(
 	*offset = old_tilemap_position - new_tile_tilemap_position;
 }
 
-void c_game_manager::sanitize_object_position(s_tilemap_object tilemap_object)
+void c_game_manager::sanitize_object_position(c_clobject* obj, const t_tilemap_position& position)
 {
-	c_clobject* obj = tilemap_object.object;
-	t_tilemap_position pos = tilemap_object.position;
-
 	int max_tiles_x = m_current_tilemap->max_tiles_x;
 	int max_tiles_y = m_current_tilemap->max_tiles_y;
 
@@ -201,25 +230,25 @@ void c_game_manager::sanitize_object_position(s_tilemap_object tilemap_object)
 		// $TODO: Handle case where speed is fast enough that we actually cross multiple tile borders in one frame???
 		// i.e. teleportation support? How do we resolve collisions? Remain at the original spot or find adjacent free spot?
 
-		int new_x = static_cast<int>(pos.x + offset.x);
-		int new_y = static_cast<int>(pos.y + offset.y);
+		int new_x = static_cast<int>(position.x + offset.x);
+		int new_y = static_cast<int>(position.y + offset.y);
 
 		// If either exceeds the maximum tilemap bounds, we will clamp
 		// the position to the maximum tilemap bounds.
 		new_x = std::clamp(new_x, 0, max_tiles_x - 1);
 		new_y = std::clamp(new_y, 0, max_tiles_y - 1);
 
-		const bool new_position_empty = m_current_tilemap->m_tiles[new_x][new_y] == nullptr;
+		const bool new_position_empty = m_current_tilemap->m_tiles[new_x][new_y] == INVALID_ID;
 
 		// Check if the new position is within bounds
 		if (new_position_empty)
 		{
 			// Move the object to the new tile
-			m_current_tilemap->m_tiles[new_x][new_y] = obj;
-			m_current_tilemap->m_tiles[pos.x][pos.y] = nullptr;
+			m_current_tilemap->m_tiles[new_x][new_y] = obj->get_id();
+			m_current_tilemap->m_tiles[position.x][position.y] = INVALID_ID;
 
 			// Migrate offset across tile boundary
-			migrate_tile_offset(&offset, pos, { new_x, new_y });
+			migrate_tile_offset(&offset, position, { new_x, new_y });
 		}
 		else // Sanitize offset to fit within appropriate tile bounds
 		{

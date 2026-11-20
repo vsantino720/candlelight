@@ -8,6 +8,7 @@ class c_clobject;
 
 template <typename T>
 struct s_vector;
+typedef int t_clobject_id;
 
 // typedefs
 typedef s_vector<int> t_tilemap_position;
@@ -23,6 +24,7 @@ struct s_tilemap
 	int max_tiles_x;
 	int max_tiles_y;
 
+	// $TODO: Does this need to be a vector?
 	// 2D vector of tiles representing the tilemap
-	std::vector<std::vector<c_clobject*>> m_tiles;
+	std::vector<std::vector<t_clobject_id>> m_tiles;
 };
