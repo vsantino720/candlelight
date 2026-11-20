@@ -2,6 +2,13 @@
 #include "clobject.h"
 #include "clattribute.h"
 
+
+void c_clobject::initialize(t_clobject_id id)
+{
+	m_id = id;
+	center_relative_tile_offset();
+}
+
 void c_clobject::update()
 {
 	for (const std::unique_ptr<c_clattribute>& attribute : m_attributes)
@@ -20,7 +27,12 @@ const t_tile_position& c_clobject::get_relative_tile_offset() const
 	return m_relative_tile_offset;
 }
 
-void c_clobject::clear_relative_tile_offset()
+void c_clobject::center_relative_tile_offset()
 {
 	m_relative_tile_offset = { 0.5f, 0.5f };
+}
+
+void c_clobject::invalidate()
+{
+	m_id = INVALID_ID;
 }

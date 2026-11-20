@@ -42,6 +42,9 @@
     <ClCompile Include="player_controller_attr.cpp">
       <Filter>Source Files\Attributes</Filter>
     </ClCompile>
+    <ClCompile Include="clobject_repository.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg.json" />
@@ -72,6 +75,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="file_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_manager_actions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="clobject_repository.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
