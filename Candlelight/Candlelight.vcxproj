@@ -158,6 +158,7 @@
   <ItemGroup>
     <ClInclude Include="camera_follow_attr.h" />
     <ClInclude Include="clattribute.h" />
+    <ClInclude Include="clobject_id.h" />
     <ClInclude Include="clobject_repository.h" />
     <ClInclude Include="file_manager.h" />
     <ClInclude Include="game_manager_actions.h" />

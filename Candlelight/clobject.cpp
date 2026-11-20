@@ -1,13 +1,14 @@
 // includes
 #include <assert.h>
 #include "clobject.h"
+#include "clobject_id.h"
 #include "clattribute.h"
 
 // c_clobject
 
 // public methods
 
-void c_clobject::initialize(t_clobject_id id)
+void c_clobject::initialize(const s_clobject_id id)
 {
 	m_id = id;
 	center_relative_tile_offset();
@@ -17,7 +18,7 @@ void c_clobject::update()
 {
 	for (const std::unique_ptr<c_clattribute>& attribute : m_attributes)
 	{
-		attribute->update();
+		attribute->update(this);
 	}
 }
 

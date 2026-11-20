@@ -7,14 +7,14 @@
 
 // public methods
 
-void c_clobject_lookup_table::add_object(const t_clobject_id id, const t_clobject_pool_index index)
+void c_clobject_lookup_table::add_object(const s_clobject_id id, const t_clobject_pool_index index)
 {
 	// Search the array for the sorted insertion point
 	int insertion_point = std::lower_bound(m_sorted_entries.begin(), m_sorted_entries.end(), id) - m_sorted_entries.begin();
 	m_sorted_entries.insert(m_sorted_entries.begin() + insertion_point, { id, index });
 }
 
-void c_clobject_lookup_table::remove_object(const t_clobject_id id)
+void c_clobject_lookup_table::remove_object(const s_clobject_id id)
 {
 	// Search the array for the object and remove it
 	auto it = std::lower_bound(m_sorted_entries.begin(), m_sorted_entries.end(), id);
@@ -24,7 +24,7 @@ void c_clobject_lookup_table::remove_object(const t_clobject_id id)
 	}
 }
 
-const t_clobject_pool_index c_clobject_lookup_table::try_to_get_pool_index_for_id(const t_clobject_id id) const
+const t_clobject_pool_index c_clobject_lookup_table::try_to_get_pool_index_for_id(const s_clobject_id id) const
 {
 	t_clobject_pool_index pool_index = -1;
 
@@ -40,7 +40,7 @@ const t_clobject_pool_index c_clobject_lookup_table::try_to_get_pool_index_for_i
 	return pool_index;
 }
 
-const t_clobject_pool_index c_clobject_lookup_table::get_pool_index_for_id(const t_clobject_id id) const
+const t_clobject_pool_index c_clobject_lookup_table::get_pool_index_for_id(const s_clobject_id id) const
 {
 	t_clobject_pool_index pool_index = try_to_get_pool_index_for_id(id);
 	assert(pool_index != -1); // Ensure that the object was found
@@ -82,7 +82,7 @@ c_clobject* c_clobject_repository::try_to_create_object()
 	return obj;	
 }
 
-void c_clobject_repository::free_object(t_clobject_id id)
+void c_clobject_repository::free_object(s_clobject_id id)
 {
 	c_clobject* obj = try_to_get_object(id);
 
@@ -94,7 +94,7 @@ void c_clobject_repository::free_object(t_clobject_id id)
 	}
 }
 
-c_clobject* c_clobject_repository::try_to_get_object(t_clobject_id id)
+c_clobject* c_clobject_repository::try_to_get_object(s_clobject_id id)
 {
 	c_clobject* obj = nullptr;
 
@@ -107,7 +107,7 @@ c_clobject* c_clobject_repository::try_to_get_object(t_clobject_id id)
 	return obj;
 }
 
-c_clobject* c_clobject_repository::get_object(t_clobject_id id)
+c_clobject* c_clobject_repository::get_object(s_clobject_id id)
 {
 	c_clobject* obj = try_to_get_object(id);
 	assert(obj != nullptr); // Ensure that the object was found

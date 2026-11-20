@@ -5,7 +5,7 @@
 #include "player_controller_attr.h"
 #include "vector.h"
 
-void c_player_controller_attr::update()
+void c_player_controller_attr::update(c_clobject* owning_object)
 {
 	const double delta_time = c_game_manager::get_instance().get_delta_time();
 
@@ -13,7 +13,7 @@ void c_player_controller_attr::update()
 	const c_input_manager& input_manager = 
 		c_game_manager::get_instance().get_readonly_input_manager();
 
-	t_tile_position current_position = m_owner->get_relative_tile_offset();
+	t_tile_position current_position = owning_object->get_relative_tile_offset();
 
 	s_vector<float> direction = { 0, 0 };
 		
@@ -42,5 +42,5 @@ void c_player_controller_attr::update()
 	current_position.x += direction.x * m_move_speed * delta_time;
 	current_position.y += direction.y * m_move_speed * delta_time;
 
-	m_owner->set_relative_tile_offset(current_position);
+	owning_object->set_relative_tile_offset(current_position);
 }

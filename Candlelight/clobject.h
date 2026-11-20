@@ -3,15 +3,13 @@
 #include <vector>
 #include <queue>
 #include <memory>
+#include "clobject_id.h"
 #include "game_manager_actions.h"
 #include "tilemap.h"
 #include "vector.h"
 
 // forward declarations
 class c_clattribute;
-
-typedef int t_clobject_id;
-constexpr int INVALID_ID = 0;
 
 // This is a class that represents a generic object in the Candlelight engine.
 // Every object can have multiple attributes attached to it, which define its behavior and properties.
@@ -20,7 +18,7 @@ class c_clobject
 {
 public:
 	void update();
-	void initialize(t_clobject_id id);
+	void initialize(const s_clobject_id id);
 	void set_relative_tile_offset(const t_tile_position& pos);
 	const t_tile_position& get_relative_tile_offset() const;
 	void center_relative_tile_offset();
@@ -33,27 +31,26 @@ public:
 	template <typename T>
 	T* new_attribute()
 	{
-		m_attributes.emplace_back(std::make_unique<T>(this));
+		m_attributes.emplace_back(std::make_unique<T>(m_id));
 		return dynamic_cast<T*>(m_attributes.back().get());
 	}
 
-	inline const t_clobject_id get_id() const
+	inline const s_clobject_id get_id() const
 	{
 		return m_id;
 	}
 
 	inline const bool is_valid() const
 	{
-		return m_id != INVALID_ID;
+		return m_id.is_valid();
 	}
-	
-	// TODO: Make private and make c_clattribute a friend
+
+	// $TODO: Think about whether this should be private and clattribute a friend class
 	void queue_action(const s_game_manager_action& action);
-
+	
 private:
-
 	// Unique identifier for this clobject. This is used to identify the object in the tilemap.
-	t_clobject_id m_id = INVALID_ID;
+	s_clobject_id m_id = INVALID_ID;
 
 	// Distance from the current tile-center, in tile units.
 	t_tile_position m_relative_tile_offset = { 0, 0 };

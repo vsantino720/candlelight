@@ -9,6 +9,7 @@ class c_clobject;
 class c_game_renderer;
 class c_input_manager;
 class c_clobject_repository;
+struct s_clobject_id;
 
 // Distance in tiles that an object must move before it is considered to have moved to a new tile.
 constexpr float TILE_MOVE_THRESHOLD = 1.0f;
@@ -16,7 +17,7 @@ constexpr const char* QUIT_GAME_EVENT_NAME = "quit_game";
 
 struct s_tilemap_object_id	
 {
-	t_clobject_id object_id;
+	s_clobject_id object_id;
 	t_tilemap_position position;
 };
 
@@ -49,10 +50,10 @@ public:
 
 	// Getters and setters
 	c_input_manager& get_input_context() const;
-	const c_clobject* try_to_get_readonly_object(const t_clobject_id id) const;
-	const c_clobject& get_readonly_object(const t_clobject_id id) const;
-	const t_tilemap_position try_to_get_object_position(const t_clobject_id id) const;
-	const t_tilemap_position get_object_position(const t_clobject_id id) const;
+	const c_clobject* try_to_get_readonly_object(const s_clobject_id id) const;
+	const c_clobject& get_readonly_object(const s_clobject_id id) const;
+	const t_tilemap_position try_to_get_object_position(const s_clobject_id id) const;
+	const t_tilemap_position get_object_position(const s_clobject_id id) const;
 	void set_input_context(c_input_manager* input_context);
 	void set_current_tilemap(s_tilemap* tilemap);
 	void set_game_renderer(c_game_renderer* game_renderer);

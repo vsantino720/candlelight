@@ -89,5 +89,8 @@
     <ClInclude Include="camera_follow_attr.h">
       <Filter>Header Files\Attributes</Filter>
     </ClInclude>
+    <ClInclude Include="clobject_id.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

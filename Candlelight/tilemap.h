@@ -2,15 +2,12 @@
 
 #include <vector>
 #include <cmath>
+#include "clobject_id.h"
 
 constexpr int INVALID_TILEMAP_POSITION = INT32_MAX;
 
-// forward declarations
-class c_clobject;
-
 template <typename T>
 struct s_vector;
-typedef int t_clobject_id;
 
 // typedefs
 typedef s_vector<int> t_tilemap_position;
@@ -28,5 +25,5 @@ struct s_tilemap
 
 	// $TODO: Does this need to be a vector?
 	// 2D vector of tiles representing the tilemap
-	std::vector<std::vector<t_clobject_id>> m_tiles;
+	std::vector<std::vector<s_clobject_id>> m_tiles;
 };

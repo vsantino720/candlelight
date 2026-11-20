@@ -6,6 +6,7 @@
 #include <queue>
 #include <SDL3/SDL.h>
 #include "clobject.h"
+#include "clobject_id.h"
 #include "clobject_repository.h"
 #include "game_manager.h"
 #include "game_manager_actions.h"
@@ -109,21 +110,21 @@ c_input_manager& c_game_manager::get_input_context() const
 	return *m_input_context;
 }
 
-const c_clobject* c_game_manager::try_to_get_readonly_object(const t_clobject_id id) const
+const c_clobject* c_game_manager::try_to_get_readonly_object(const s_clobject_id id) const
 {
 	assert(m_clobject_repository != nullptr);
 	const c_clobject* obj = m_clobject_repository->try_to_get_object(id);
 	return obj;
 }
 
-const c_clobject& c_game_manager::get_readonly_object(const t_clobject_id id) const
+const c_clobject& c_game_manager::get_readonly_object(const s_clobject_id id) const
 {
 	assert(m_clobject_repository != nullptr);
 	const c_clobject* obj = m_clobject_repository->get_object(id);
 	return *obj;
 }
 
-const t_tilemap_position c_game_manager::try_to_get_object_position(const t_clobject_id id) const
+const t_tilemap_position c_game_manager::try_to_get_object_position(const s_clobject_id id) const
 {
 	t_tilemap_position pos = { INVALID_TILEMAP_POSITION, INVALID_TILEMAP_POSITION };
 
@@ -146,7 +147,7 @@ const t_tilemap_position c_game_manager::try_to_get_object_position(const t_clob
 	return pos;
 }
 
-const t_tilemap_position c_game_manager::get_object_position(const t_clobject_id id) const
+const t_tilemap_position c_game_manager::get_object_position(const s_clobject_id id) const
 {
 	t_tilemap_position pos = try_to_get_object_position(id);
 	assert(pos.x != INVALID_TILEMAP_POSITION && pos.y != INVALID_TILEMAP_POSITION);
@@ -190,9 +191,9 @@ void c_game_manager::update_objects()
 		{
 			for (int y = 0; y < max_tiles_y; ++y)
 			{
-				if (m_current_tilemap->m_tiles[x][y] != INVALID_ID)
+				if (m_current_tilemap->m_tiles[x][y].is_valid())
 				{
-					t_clobject_id obj_id = m_current_tilemap->m_tiles[x][y];
+					s_clobject_id obj_id = m_current_tilemap->m_tiles[x][y];
 					s_tilemap_object_id tilemap_object_id = { obj_id,{ x, y } };
 					update_queue.push(tilemap_object_id);
 				}

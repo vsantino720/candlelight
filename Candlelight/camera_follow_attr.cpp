@@ -3,11 +3,11 @@
 #include "clobject.h"
 #include "game_manager_actions.h"
 
-void c_camera_follow_attr::update()
+void c_camera_follow_attr::update(c_clobject* owning_object)
 {
 	s_game_manager_action action;
 	action.action_type = e_game_manager_action::SET_VIEWPOINT_FROM_OBJECT;
 	action.action_data.set_viewpoint_from_object.offset_from_object = { 0, 0 };
 
-	m_owner->queue_action(action);
+	owning_object->queue_action(action);
 }
