@@ -3,6 +3,8 @@
 #include <vector>
 #include <cmath>
 
+constexpr int INVALID_TILEMAP_POSITION = INT32_MAX;
+
 // forward declarations
 class c_clobject;
 

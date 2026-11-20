@@ -11,6 +11,7 @@
 #include "game_manager.h"
 #include "tilemap.h"
 #include "player_controller_attr.h"
+#include "camera_follow_attr.h"
 
 int main(int argc, char* argv[]) 
 {
@@ -33,6 +34,8 @@ int main(int argc, char* argv[])
 		c_player_controller_attr* player_controller_attr = 
 			player_object->new_attribute<c_player_controller_attr>();
 		player_controller_attr->set_move_speed(3); // 2 tiles per second
+		c_camera_follow_attr* camera_follow_attr =
+			player_object->new_attribute<c_camera_follow_attr>();
 	}
 
 	s_tilemap initial_tilemap(16, 9); // 8x6 tilemap

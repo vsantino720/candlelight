@@ -8,6 +8,7 @@
 #include "clobject.h"
 #include "clobject_repository.h"
 #include "game_manager.h"
+#include "game_manager_actions.h"
 #include "game_renderer.h"
 #include "input_manager.h"
 #include "tilemap.h"
@@ -82,7 +83,7 @@ bool c_game_manager::run_game()
 				m_game_renderer->update();
 				m_game_renderer->draw_tilemap_from_viewpoint(
 					*m_current_tilemap,
-					{ 8.0f, 4.0f }); // $TODO: Add camera support
+					m_viewpoint_position);
 				m_game_renderer->render();
 			}
 		}
@@ -122,6 +123,36 @@ const c_clobject& c_game_manager::get_readonly_object(const t_clobject_id id) co
 	return *obj;
 }
 
+const t_tilemap_position c_game_manager::try_to_get_object_position(const t_clobject_id id) const
+{
+	t_tilemap_position pos = { INVALID_TILEMAP_POSITION, INVALID_TILEMAP_POSITION };
+
+	// $TODO: Introduce an acceleration reverse lookup table for object positions, so we don't have to iterate the entire tilemap every frame.
+	if (m_current_tilemap != nullptr)
+	{
+		for (int x = 0; x < m_current_tilemap->max_tiles_x; ++x)
+		{
+			for (int y = 0; y < m_current_tilemap->max_tiles_y; ++y)
+			{
+				if (m_current_tilemap->m_tiles[x][y] == id)
+				{
+					pos = { x, y };
+					break;
+				}
+			}
+		}
+	}
+
+	return pos;
+}
+
+const t_tilemap_position c_game_manager::get_object_position(const t_clobject_id id) const
+{
+	t_tilemap_position pos = try_to_get_object_position(id);
+	assert(pos.x != INVALID_TILEMAP_POSITION && pos.y != INVALID_TILEMAP_POSITION);
+	return pos;
+}
+
 void c_game_manager::set_current_tilemap(s_tilemap* tilemap)
 {
 	m_current_tilemap = tilemap;
@@ -153,7 +184,7 @@ void c_game_manager::update_objects()
 		int max_tiles_y = m_current_tilemap->max_tiles_y;
 
 		//$TODO: Should we just loop the clobject repository instead of the tilemap?
-		std::queue<s_tilemap_object> update_queue;
+		std::queue<s_tilemap_object_id> update_queue;
 
 		for (int x = 0; x < max_tiles_x; ++x)
 		{
@@ -162,35 +193,67 @@ void c_game_manager::update_objects()
 				if (m_current_tilemap->m_tiles[x][y] != INVALID_ID)
 				{
 					t_clobject_id obj_id = m_current_tilemap->m_tiles[x][y];
-					s_tilemap_object tilemap_object = { obj_id,{ x, y } };
-					update_queue.push(tilemap_object);
+					s_tilemap_object_id tilemap_object_id = { obj_id,{ x, y } };
+					update_queue.push(tilemap_object_id);
 				}
 			}
 		}
 
 		while (!update_queue.empty())
 		{
-			s_tilemap_object tilemap_object = update_queue.front();
+			s_tilemap_object_id tilemap_object_id = update_queue.front();
 			update_queue.pop();
 
-			c_clobject* obj = m_clobject_repository->try_to_get_object(tilemap_object.object);
+			c_clobject* obj = m_clobject_repository->try_to_get_object(tilemap_object_id.object_id);
 
 			if (obj != nullptr)
 			{
 				// Run the update function for the object, which will in turn update its attributes
 				obj->update();
 
+				s_tilemap_object tilemap_object = { obj, tilemap_object_id.position };
+
+				process_pending_actions_for_object(tilemap_object);
+
 				// Check if the object has moved to a new tile, and enforce collision and tilebounds
-				sanitize_object_position(obj, tilemap_object.position);
+				sanitize_object_position(tilemap_object);
 			}
 			else
 			{
-				std::cerr << "Error: Object with ID at position " << tilemap_object.position.x << "," 
-					<< tilemap_object.position.y << " not found in repository." << std::endl;
+				std::cerr << "Error: Object with ID at position " << tilemap_object_id.position.x << "," 
+					<< tilemap_object_id.position.y << " not found in repository." << std::endl;
 			}
 		}
 	}
 }
+
+void c_game_manager::process_pending_actions_for_object(s_tilemap_object tilemap_obj)
+{
+	assert(tilemap_obj.is_valid());
+	c_clobject* obj = tilemap_obj.object;
+
+	assert(obj != nullptr);
+	while (obj->has_pending_actions())
+	{
+		const s_game_manager_action& action = obj->get_next_pending_action();
+		switch (action.action_type)
+		{
+		case SET_VIEWPOINT_FROM_OBJECT:
+			t_tile_position obj_position = 
+				{tilemap_obj.position.x 
+					+ obj->get_relative_tile_offset().x 
+					+ action.action_data.set_viewpoint_from_object.offset_from_object.x, 
+				tilemap_obj.position.y 
+					+ obj->get_relative_tile_offset().y 
+					+ action.action_data.set_viewpoint_from_object.offset_from_object.y};
+			m_viewpoint_position = obj_position;
+			break;
+		}
+
+		obj->pop_next_pending_action();
+	}
+}
+			
 
 // Modifies the tile offset to guarantee it fits within the tile move threshold
 void c_game_manager::sanitize_tile_offset(t_tile_position* offset)
@@ -218,8 +281,13 @@ void c_game_manager::migrate_tile_offset(
 	*offset = old_tilemap_position - new_tile_tilemap_position;
 }
 
-void c_game_manager::sanitize_object_position(c_clobject* obj, const t_tilemap_position& position)
+void c_game_manager::sanitize_object_position(s_tilemap_object tilemap_obj)
 {
+	assert(tilemap_obj.is_valid());
+
+	c_clobject* obj = tilemap_obj.object;
+	t_tilemap_position position = tilemap_obj.position;
+
 	int max_tiles_x = m_current_tilemap->max_tiles_x;
 	int max_tiles_y = m_current_tilemap->max_tiles_y;
 

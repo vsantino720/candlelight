@@ -14,10 +14,21 @@ class c_clobject_repository;
 constexpr float TILE_MOVE_THRESHOLD = 1.0f;
 constexpr const char* QUIT_GAME_EVENT_NAME = "quit_game";
 
+struct s_tilemap_object_id	
+{
+	t_clobject_id object_id;
+	t_tilemap_position position;
+};
+
 struct s_tilemap_object
 {
-	t_clobject_id object;
+	c_clobject* object;
 	t_tilemap_position position;
+
+	inline bool is_valid() const 
+	{
+		return object != nullptr;
+	}
 };
 
 // Game manager singleton handles all update loop logic on downstream objects, active tilemap,
@@ -40,6 +51,8 @@ public:
 	c_input_manager& get_input_context() const;
 	const c_clobject* try_to_get_readonly_object(const t_clobject_id id) const;
 	const c_clobject& get_readonly_object(const t_clobject_id id) const;
+	const t_tilemap_position try_to_get_object_position(const t_clobject_id id) const;
+	const t_tilemap_position get_object_position(const t_clobject_id id) const;
 	void set_input_context(c_input_manager* input_context);
 	void set_current_tilemap(s_tilemap* tilemap);
 	void set_game_renderer(c_game_renderer* game_renderer);
@@ -55,6 +68,7 @@ private:
 
 	// Update the game state, including all objects in the current tilemap.
 	void update_objects();
+	void process_pending_actions_for_object(s_tilemap_object tilemap_obj);
 
 	// Position
 	void sanitize_tile_offset(t_tile_position* offset);
@@ -62,7 +76,7 @@ private:
 		t_tile_position* offset, 
 		const t_tilemap_position& old_pos,
 		const t_tilemap_position& new_pos);
-	void sanitize_object_position(c_clobject* obj, const t_tilemap_position& position);
+	void sanitize_object_position(s_tilemap_object tilemap_obj);
 
 	inline bool offset_exceeded_tile_threshold(const t_tile_position offset) const
 	{
@@ -81,4 +95,7 @@ private:
 
 	// Time since last frame
 	double m_delta_time = 0.0;
+
+	// Viewpoint position in tilemap coordinates. This is the center of the screen in tilemap coordinates.
+	t_tile_position m_viewpoint_position = { 0.0f, 0.0f };
 };

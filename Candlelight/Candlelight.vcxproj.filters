@@ -45,6 +45,9 @@
     <ClCompile Include="clobject_repository.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="camera_follow_attr.cpp">
+      <Filter>Source Files\Attributes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg.json" />
@@ -82,6 +85,9 @@
     </ClInclude>
     <ClInclude Include="clobject_repository.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="camera_follow_attr.h">
+      <Filter>Header Files\Attributes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

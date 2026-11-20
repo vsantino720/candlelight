@@ -142,6 +142,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="camera_follow_attr.cpp" />
     <ClCompile Include="clobject.cpp" />
     <ClCompile Include="clobject_repository.cpp" />
     <ClCompile Include="game_manager.cpp" />
@@ -155,6 +156,7 @@
     <None Include="vcpkg.json" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="camera_follow_attr.h" />
     <ClInclude Include="clattribute.h" />
     <ClInclude Include="clobject_repository.h" />
     <ClInclude Include="file_manager.h" />
