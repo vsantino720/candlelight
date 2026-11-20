@@ -19,7 +19,8 @@ int main(int argc, char* argv[])
 		{ "move_up", SDL_SCANCODE_W },
 		{ "move_down", SDL_SCANCODE_S },
 		{ "move_left", SDL_SCANCODE_A },
-		{ "move_right", SDL_SCANCODE_D }
+		{ "move_right", SDL_SCANCODE_D },
+		{ "speed_boost", SDL_SCANCODE_LSHIFT }
 	};
 
 	std::vector<s_event_mapping> event_mappings = {
@@ -34,6 +35,7 @@ int main(int argc, char* argv[])
 		c_player_controller_attr* player_controller_attr = 
 			player_object->new_attribute<c_player_controller_attr>();
 		player_controller_attr->set_move_speed(3); // 2 tiles per second
+		player_controller_attr->set_speed_boost_scalar(2); // 2x speed boost when shift is held
 		c_camera_follow_attr* camera_follow_attr =
 			player_object->new_attribute<c_camera_follow_attr>();
 	}

@@ -16,6 +16,8 @@ void c_player_controller_attr::update(c_clobject* owning_object)
 	t_tile_position current_position = owning_object->get_relative_tile_offset();
 
 	s_vector<float> direction = { 0, 0 };
+
+	int current_speed = m_move_speed;
 		
 	if (input_manager.input_is_pressed("move_up"))
 	{
@@ -37,10 +39,15 @@ void c_player_controller_attr::update(c_clobject* owning_object)
 		direction.x += 1;
 	}
 
+	if (input_manager.input_is_pressed("speed_boost"))
+	{
+		current_speed *= m_speed_boost_scalar;
+	}
+
 	direction.normalize();
 
-	current_position.x += direction.x * m_move_speed * delta_time;
-	current_position.y += direction.y * m_move_speed * delta_time;
+	current_position.x += direction.x * current_speed * delta_time;
+	current_position.y += direction.y * current_speed * delta_time;
 
 	owning_object->set_relative_tile_offset(current_position);
 }

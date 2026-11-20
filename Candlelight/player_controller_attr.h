@@ -16,7 +16,9 @@ public:
 	void update(c_clobject* owning_object) override;
 
 	inline void set_move_speed(int move_speed) { m_move_speed = move_speed; }
+	inline void set_speed_boost_scalar(int speed_boost_scalar) { m_speed_boost_scalar = speed_boost_scalar; }
 private:
 	// Speed at which the player can move, in tiles per second
 	int m_move_speed = 0;
+	int m_speed_boost_scalar = 1;
 };
